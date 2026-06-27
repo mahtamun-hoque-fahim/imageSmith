@@ -28,6 +28,41 @@
   --font-mono: var(--font-jetbrains-mono);
 }
 
+/* Motion easing tokens */
+:root {
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-subtle: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Entrance keyframes */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.22s var(--ease-out) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.18s var(--ease-out) both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s var(--ease-out) both;
+}
+
 *,
 *::before,
 *::after {

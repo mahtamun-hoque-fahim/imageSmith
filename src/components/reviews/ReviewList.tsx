@@ -42,7 +42,9 @@ export default function ReviewList() {
         </h2>
       </div>
 
-      <ReviewForm onSubmit={handleNewReview} />
+      <div className="animate-fade-in">
+        <ReviewForm onSubmit={handleNewReview} />
+      </div>
 
       {loading && (
         <div className="flex items-center gap-2 text-text-muted text-sm">
@@ -59,10 +61,11 @@ export default function ReviewList() {
 
       {!loading && reviews.length > 0 && (
         <div className="flex flex-col gap-4">
-          {reviews.map((r) => (
+          {reviews.map((r, i) => (
             <div
               key={r.id}
-              className="bg-surface border border-border rounded-lg px-5 py-4 flex flex-col gap-2"
+              className="animate-fade-up bg-surface border border-border rounded-lg px-5 py-4 flex flex-col gap-2"
+              style={{ animationDelay: `${i * 40}ms` }}
             >
               <p className="text-text text-sm leading-relaxed">{r.content}</p>
               <span className="text-text-faint text-xs font-mono">

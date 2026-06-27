@@ -334,9 +334,9 @@ export default function ConverterZone() {
           className={[
             'relative border-2 border-dashed rounded-xl p-12',
             'flex flex-col items-center justify-center gap-4',
-            'transition-colors duration-150 cursor-pointer',
+            'transition-[colors,transform,border-color,background-color] duration-150 cursor-pointer',
             isDragging
-              ? 'border-accent bg-accent-faint'
+              ? 'border-accent bg-accent-faint scale-[1.01]'
               : 'border-border bg-surface hover:border-accent hover:bg-accent-faint',
           ].join(' ')}
           onClick={() => engineReady && fileInputRef.current?.click()}
@@ -384,7 +384,7 @@ export default function ConverterZone() {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-accent text-bg font-semibold text-sm hover:bg-accent-hover transition-colors duration-150"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-accent text-bg font-semibold text-sm hover:bg-accent-hover transition-[background-color,transform] duration-150 ease-out active:scale-[0.97]"
           >
             <Upload className="w-4 h-4" />
             Select Files
@@ -393,7 +393,7 @@ export default function ConverterZone() {
           {folderSupported && !firefox && (
             <button
               onClick={() => folderInputRef.current?.click()}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text font-medium text-sm hover:bg-surface-elevated transition-colors duration-150"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text font-medium text-sm hover:bg-surface-elevated transition-[background-color,transform] duration-150 ease-out active:scale-[0.97]"
             >
               <FolderOpen className="w-4 h-4 text-text-muted" />
               Select Folder
@@ -402,7 +402,7 @@ export default function ConverterZone() {
 
           <button
             onClick={() => zipInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text font-medium text-sm hover:bg-surface-elevated transition-colors duration-150"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text font-medium text-sm hover:bg-surface-elevated transition-[background-color,transform] duration-150 ease-out active:scale-[0.97]"
           >
             <FileArchive className="w-4 h-4 text-text-muted" />
             Upload ZIP
@@ -438,7 +438,7 @@ export default function ConverterZone() {
 
       {/* Converting state */}
       {converting && (
-        <div className="bg-surface border border-border rounded-xl p-8 flex flex-col gap-5">
+        <div className="animate-fade-up bg-surface border border-border rounded-xl p-8 flex flex-col gap-5">
           <div className="flex items-center gap-2 text-text-muted text-sm">
             <Loader2 className="w-4 h-4 animate-spin text-accent" />
             <span>Converting&hellip;</span>
@@ -457,8 +457,8 @@ export default function ConverterZone() {
                 </div>
                 <div className="w-full bg-surface-elevated rounded-full h-1.5">
                   <div
-                    className="bg-accent h-1.5 rounded-full transition-all duration-150 ease-out"
-                    style={{ width: `${percent}%` }}
+                    className="bg-accent h-1.5 rounded-full transition-[width] duration-150"
+                    style={{ width: `${percent}%`, transitionTimingFunction: 'var(--ease-out)' }}
                   />
                 </div>
               </div>
@@ -469,7 +469,7 @@ export default function ConverterZone() {
 
       {/* Done state */}
       {done && (
-        <div className="bg-surface border border-border rounded-xl p-8 flex flex-col gap-5">
+        <div className="animate-scale-in bg-surface border border-border rounded-xl p-8 flex flex-col gap-5">
           <div className="flex items-center gap-2 text-success">
             <CheckCircle className="w-5 h-5" />
             <span className="font-medium">
@@ -490,7 +490,7 @@ export default function ConverterZone() {
           <div className="flex gap-3 flex-wrap">
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-md bg-accent text-bg font-semibold text-sm hover:bg-accent-hover transition-colors duration-150"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-md bg-accent text-bg font-semibold text-sm hover:bg-accent-hover transition-[background-color,transform] duration-150 ease-out active:scale-[0.97]"
             >
               <Download className="w-4 h-4" />
               Download{' '}
@@ -501,7 +501,7 @@ export default function ConverterZone() {
 
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text-muted text-sm hover:bg-surface-elevated hover:text-text transition-colors duration-150"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-surface border border-border text-text-muted text-sm hover:bg-surface-elevated hover:text-text transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97]"
             >
               <RefreshCw className="w-4 h-4" />
               Convert more
@@ -512,14 +512,14 @@ export default function ConverterZone() {
 
       {/* Error state */}
       {convertState === 'error' && error && (
-        <div className="bg-surface border border-danger/30 rounded-xl p-6 flex flex-col gap-4">
+        <div className="animate-fade-up bg-surface border border-danger/30 rounded-xl p-6 flex flex-col gap-4">
           <div className="flex items-start gap-2 text-danger text-sm">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
           <button
             onClick={handleReset}
-            className="self-start flex items-center gap-2 px-4 py-2 rounded-md bg-surface border border-border text-text-muted text-sm hover:bg-surface-elevated hover:text-text transition-colors duration-150"
+            className="self-start flex items-center gap-2 px-4 py-2 rounded-md bg-surface border border-border text-text-muted text-sm hover:bg-surface-elevated hover:text-text transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97]"
           >
             <RefreshCw className="w-4 h-4" />
             Try again

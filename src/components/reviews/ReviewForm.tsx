@@ -67,8 +67,8 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
         className={[
           'w-full bg-surface border rounded-lg px-4 py-3',
           'text-text placeholder-text-faint text-sm font-inter',
-          'transition-colors resize-none',
-          'focus:border-accent focus:outline-none',
+          'transition-[border-color,box-shadow] duration-150 resize-none',
+          'focus:border-accent focus:outline-none focus:shadow-[0_0_0_3px_#6d66f51a]',
           state === 'error' ? 'border-danger/50' : 'border-border',
           state === 'done' ? 'opacity-50' : '',
         ].join(' ')}
@@ -89,9 +89,9 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
           onClick={handleSubmit}
           disabled={!canSubmit}
           className={[
-            'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-150',
+            'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-[background-color,transform] duration-150 ease-out',
             canSubmit
-              ? 'bg-accent text-bg hover:bg-accent-hover cursor-pointer'
+              ? 'bg-accent text-bg hover:bg-accent-hover active:scale-[0.97] cursor-pointer'
               : 'bg-surface border border-border text-text-faint cursor-not-allowed',
           ].join(' ')}
         >
