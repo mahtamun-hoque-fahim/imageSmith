@@ -36,7 +36,7 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 - [LOCKED] Conversion engine is libwebp WASM on ALL browsers — Canvas API is NOT used (Firefox cannot encode WebP via canvas.toBlob)
 - [LOCKED] Folder upload via `webkitdirectory` — Chrome, Edge, Safari only
 - [LOCKED] Firefox folder fallback — ZIP file upload instead; JSZip unpacks client-side, converts all images, repacks with identical structure
-- [LOCKED] Firefox users get: single file upload ✓, ZIP upload ✓, folder drag-and-drop ✗ (with clear browser notice)
+- [LOCKED] Firefox users get: single file upload (yes), ZIP upload (yes), folder drag-and-drop (no — clear browser notice shown)
 
 ---
 
