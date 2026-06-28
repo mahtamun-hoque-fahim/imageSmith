@@ -6,18 +6,18 @@ import ConverterWrapper from '@/components/converter/ConverterWrapper'
 const FEATURES = [
   {
     icon: Lock,
-    title: 'Private by design',
-    desc: 'Files never leave your device. 100% client-side via libwebp WASM.',
+    title: 'Your files never upload',
+    desc: 'All conversion happens in your browser using libwebp. Nothing touches a server. Nothing leaves your device.',
   },
   {
     icon: FolderOpen,
-    title: 'Folder structure preserved',
-    desc: 'Drop a nested folder. Get back an identical ZIP — only the format changes.',
+    title: 'Folders come back whole',
+    desc: 'Drop a nested folder. The output ZIP mirrors it exactly — subfolders, filenames, everything. Only the extension changes.',
   },
   {
     icon: Zap,
     title: 'No paywall. No limits.',
-    desc: 'Batch convert 1000 images for free, forever. No account needed.',
+    desc: 'Convert 1000 images free. No account. No file size caps. Just drag, drop, download.',
   },
 ]
 
@@ -37,10 +37,10 @@ export default function HomePage() {
         </h1>
 
         <p className="text-text-muted text-lg max-w-xl leading-relaxed">
-          Drop a folder of 1000 images in any format. Get back an identical
-          ZIP — same folder tree, same filenames, just{' '}
-          <span className="font-mono text-text">.webp</span>. Free forever.
-          No upload. No account.
+          Drop a folder of 1000 images. Get back a ZIP with the same
+          structure — same names, just{' '}
+          <span className="font-mono text-text">.webp</span>. Nothing leaves
+          your machine. No account required.
         </p>
       </section>
 

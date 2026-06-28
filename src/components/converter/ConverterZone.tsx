@@ -288,9 +288,9 @@ export default function ConverterZone() {
         <div className="flex items-start gap-3 bg-surface border border-border rounded-lg px-4 py-3 text-sm text-text-muted">
           <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
           <span>
-            Folder upload requires Chrome or Edge. On Firefox, upload a{' '}
-            <strong className="text-text">ZIP file</strong> — folder
-            structure is fully preserved in the output.
+            Folder upload doesn&apos;t work in Firefox. Drop a{' '}
+            <strong className="text-text">ZIP file</strong> instead — the
+            folder structure comes through intact.
           </span>
         </div>
       )}

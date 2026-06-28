@@ -10,17 +10,18 @@ export default function Footer() {
             ImageSmith
           </h3>
           <p className="text-text-muted text-sm leading-relaxed">
-            A free, client-side WebP converter. Drop a folder of a thousand
-            images, get back an identical ZIP with everything converted — same
-            folder tree, same filenames, just{' '}
-            <span className="font-mono text-text">.webp</span>. No paywall.
-            No account. Your files never leave your device.
+            A free WebP converter that runs entirely in your browser. Drop a
+            folder of 1000 images, get back a ZIP with the same folder tree
+            — just{' '}
+            <span className="font-mono text-text">.webp</span> instead of
+            whatever you started with. Nothing uploads. Nothing needs an
+            account.
           </p>
           <ul className="flex flex-col gap-1.5 text-sm text-text-muted">
             <li>&#8212; libwebp WASM quality control</li>
             <li>&#8212; Folder structure preserved in output ZIP</li>
             <li>&#8212; Single file, batch, folder, or ZIP input</li>
-            <li>&#8212; Firefox support via ZIP upload fallback</li>
+            <li>&#8212; Firefox supported via ZIP upload</li>
           </ul>
         </div>
 
@@ -30,12 +31,9 @@ export default function Footer() {
             Built by Fahim
           </h3>
           <p className="text-text-muted text-sm leading-relaxed">
-            CSE student at BGC Trust University Bangladesh, frontend AI
-            engineering intern at Flyrank.ai, and indie developer operating
-            under the{' '}
-            <span className="text-text font-medium">Mahtamun</span> brand.
-            Building tools he needs — and sharing them when they&apos;re
-            ready.
+            CSE student at BGC Trust University Bangladesh and frontend AI
+            engineering intern at Flyrank.ai. He builds tools he actually
+            needs, and releases them when they&apos;re ready.
           </p>
           <div className="flex items-center gap-4 mt-1">
             <a

@@ -53,7 +53,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
   return (
     <div className="flex flex-col gap-3">
       <label className="text-sm text-text-muted" htmlFor="review-input">
-        Share your experience
+        Leave a review
       </label>
 
       <textarea
