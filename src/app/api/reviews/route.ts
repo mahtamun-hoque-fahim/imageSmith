@@ -43,7 +43,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   // Rate limit by IP
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1'
+  // x-vercel-ip-address is injected by Vercel edge and cannot be forged by the client.
+  // Fall back to x-forwarded-for only for local dev (where Vercel header is absent).
+  const ip =
+    req.headers.get('x-vercel-ip-address') ??
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    '127.0.0.1'
 
   try {
     const rl = getRatelimit()

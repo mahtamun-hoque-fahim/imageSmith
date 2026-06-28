@@ -21,8 +21,20 @@ const nextConfig: NextConfig = {
               "img-src 'self' blob: data:",
               "connect-src 'self'",
               "worker-src 'self' blob:",
-              "font-src 'self'",
+              "font-src 'self' https://fonts.gstatic.com",
             ].join('; '),
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
           },
         ],
       },
