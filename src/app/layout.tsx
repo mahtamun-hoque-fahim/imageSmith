@@ -1,25 +1,70 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://imagesmith.dev'
+
 export const metadata: Metadata = {
-  title: 'ImageSmith — Free WebP Converter',
+  title: 'Free Batch WebP Converter — Folder Structure Preserved | ImageSmith',
   description:
-    'Convert any image or folder of images to WebP in seconds. No paywall, no uploads, no account. Folder structure preserved in output ZIP.',
+    'Free WebP converter that preserves folder structure. Convert single images, batches, or entire folder trees — files stay on your device. No upload, no account, no paywall.',
+  alternates: {
+    canonical: APP_URL,
+  },
   openGraph: {
-    title: 'ImageSmith — Free WebP Converter',
+    title: 'Free Batch WebP Converter — Folder Structure Preserved',
     description:
-      'Batch convert images to WebP with folder structure preserved. 100% client-side, completely free.',
+      'Convert batches or entire folder trees to WebP. Files never leave your device. No paywall, no account, no upload — just fast, private WebP conversion.',
     type: 'website',
-    url: process.env.NEXT_PUBLIC_APP_URL,
+    url: APP_URL,
+    images: [
+      {
+        url: `${APP_URL}/og.png`,
+        width: 1200,
+        height: 630,
+        alt: 'ImageSmith — Free Batch WebP Converter',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ImageSmith — Free WebP Converter',
+    title: 'Free Batch WebP Converter — Folder Structure Preserved',
     description:
-      'Batch convert images to WebP with folder structure preserved. 100% client-side, completely free.',
+      'Convert batches or entire folder trees to WebP. Files never leave your device. No paywall, no account, no upload.',
+    images: [`${APP_URL}/og.png`],
   },
   robots: { index: true, follow: true },
 }
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'ImageSmith',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Web',
+    url: APP_URL,
+    description:
+      'Free batch WebP converter that preserves folder structure. Convert single images, batches, or entire folder trees. 100% client-side — files never leave your device.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    featureList: [
+      'Batch image to WebP conversion',
+      'Folder structure preserved in output ZIP',
+      '100% client-side processing via libwebp WASM',
+      'No file upload to server',
+      'Firefox ZIP fallback for folder input',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'ImageSmith',
+    url: APP_URL,
+  },
+]
 
 export default function RootLayout({
   children,
@@ -38,6 +83,10 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-screen bg-bg text-text antialiased">

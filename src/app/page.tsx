@@ -37,10 +37,10 @@ export default function HomePage() {
         </h1>
 
         <p className="text-text-muted text-lg max-w-xl leading-relaxed">
-          Drop a folder of a thousand images. Get back an identical ZIP with
-          everything converted — same structure, same filenames, just{' '}
-          <span className="font-mono text-text">.webp</span>. Free forever. No
-          paywall.
+          Drop a folder of 1000 images in any format. Get back an identical
+          ZIP — same folder tree, same filenames, just{' '}
+          <span className="font-mono text-text">.webp</span>. Free forever.
+          No upload. No account.
         </p>
       </section>
 
