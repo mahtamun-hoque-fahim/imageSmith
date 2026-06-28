@@ -43,7 +43,8 @@ export default function HomePage() {
           your machine. No account required.
         </p>
 
-        {/* IMAGE-BRIEF: hero-01 | 16:9 | abstract 3D render — floating JPG/PNG file cards on left dissolving into .webp cards on right, dark bg-surface background, accent glow on WebP output cards, soft volumetric light from top-left, no baked-in text, generous negative space */}
+        {/* IMAGE-BRIEF: hero-01 | 16:9 | abstract 3D render of floating JPG/PNG file cards dissolving into .webp cards, dark bg-surface bg, indigo accent glow on output, volumetric top-left light, no text */}
+        {/* PROMPT: cinematic 3D product visualization, floating translucent file cards labeled JPG and PNG on the left gently dissolving and morphing into crisp WebP format cards on the right, deep dark navy background, volumetric indigo-violet glow radiating softly from the WebP output cards, soft rim lighting from top-left, subtle geometric motion blur on the transforming cards, generous negative space at center, zero UI chrome, zero text, zero watermarks, hyper-detailed surface materials, octane render, 8K resolution, professional dark tech product aesthetic, award-winning CGI --ar 16:9 --style raw --q 2 */}
         <div
           data-image-slot="hero-01"
           className="w-full max-w-2xl aspect-video rounded-xl border border-dashed border-border bg-surface/40 mt-2"
@@ -59,7 +60,8 @@ export default function HomePage() {
       <section className="border-t border-border">
         <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col gap-12">
 
-          {/* IMAGE-BRIEF: feat-01 | 3:1 | minimal flat line illustration — image files entering left, ZIP exiting right with visible nested folder tree intact, accent color for the output ZIP, text-muted lines for folder structure, bg-surface background, no labels or text baked in */}
+          {/* IMAGE-BRIEF: feat-01 | 3:1 | flat isometric line illustration — image files entering left, ZIP exiting right with nested folder tree visible, accent on ZIP output, no labels */}
+          {/* PROMPT: clean flat isometric vector illustration, horizontal flow diagram, left side shows a varied stack of image file format icons (JPG PNG GIF BMP) with subtle size variation, center has a minimal conversion funnel or arrow, right side shows a single ZIP archive file with an expanded nested folder tree floating beside it preserving the exact directory hierarchy, indigo-violet accent color on the ZIP output and folder nodes, desaturated muted blue-gray fine lines for folder path connectors, deep dark navy background, zero text labels, zero numbers, zero UI chrome, technical but approachable aesthetic, generous negative space top and bottom, precise vector-clean edges, high contrast, professional --ar 3:1 --style raw */}
           <div
             data-image-slot="feat-01"
             className="w-full rounded-xl border border-dashed border-border bg-surface/40"
