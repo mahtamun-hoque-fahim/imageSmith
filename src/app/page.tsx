@@ -43,12 +43,15 @@ export default function HomePage() {
           your machine. No account required.
         </p>
 
-        {/* IMAGE-BRIEF: hero-01 | 16:9 | abstract 3D render of floating JPG/PNG file cards dissolving into .webp cards, dark bg-surface bg, indigo accent glow on output, volumetric top-left light, no text */}
+        {/* IMAGE-BRIEF: hero-01 | 16:9 | WIRED → /public/images/hero.png — swap with 2560×1440 final render when ready */}
         {/* PROMPT: cinematic 3D product visualization, floating translucent file cards labeled JPG and PNG on the left gently dissolving and morphing into crisp WebP format cards on the right, deep dark navy background, volumetric indigo-violet glow radiating softly from the WebP output cards, soft rim lighting from top-left, subtle geometric motion blur on the transforming cards, generous negative space at center, zero UI chrome, zero text, zero watermarks, hyper-detailed surface materials, octane render, 8K resolution, professional dark tech product aesthetic, award-winning CGI --ar 16:9 --style raw --q 2 */}
-        <div
-          data-image-slot="hero-01"
-          className="w-full max-w-2xl aspect-video rounded-xl border border-dashed border-border bg-surface/40 mt-2"
-        />
+        <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2">
+          <img
+            src="/images/hero.png"
+            alt="JPG and PNG files transforming into WebP format"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </section>
 
       {/* Converter */}
@@ -60,13 +63,16 @@ export default function HomePage() {
       <section className="border-t border-border">
         <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col gap-12">
 
-          {/* IMAGE-BRIEF: feat-01 | 3:1 | flat isometric line illustration — image files entering left, ZIP exiting right with nested folder tree visible, accent on ZIP output, no labels */}
+          {/* IMAGE-BRIEF: feat-01 | 3:1 | WIRED → /public/images/feat-flow.png — swap with 2400×800 final render when ready */}
           {/* PROMPT: clean flat isometric vector illustration, horizontal flow diagram, left side shows a varied stack of image file format icons (JPG PNG GIF BMP) with subtle size variation, center has a minimal conversion funnel or arrow, right side shows a single ZIP archive file with an expanded nested folder tree floating beside it preserving the exact directory hierarchy, indigo-violet accent color on the ZIP output and folder nodes, desaturated muted blue-gray fine lines for folder path connectors, deep dark navy background, zero text labels, zero numbers, zero UI chrome, technical but approachable aesthetic, generous negative space top and bottom, precise vector-clean edges, high contrast, professional --ar 3:1 --style raw */}
-          <div
-            data-image-slot="feat-01"
-            className="w-full rounded-xl border border-dashed border-border bg-surface/40"
-            style={{ aspectRatio: '3 / 1' }}
-          />
+          <div className="w-full rounded-xl overflow-hidden">
+            <img
+              src="/images/feat-flow.png"
+              alt="Image files converting to WebP with folder structure preserved"
+              className="w-full object-cover"
+              style={{ aspectRatio: '3 / 1' }}
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {FEATURES.map(({ icon: Icon, title, desc }) => (

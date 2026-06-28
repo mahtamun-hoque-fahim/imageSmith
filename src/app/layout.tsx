@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     url: APP_URL,
     images: [
       {
-        // IMAGE-BRIEF: og-01 | 1.91:1 (1200x630px) | dark brand card — ImageSmith wordmark Syne 700 top-left, tagline Inter below, 4px accent bar bottom, no gradients — save as /public/og.png
+        // IMAGE-BRIEF: og-01 | 1.91:1 (1200x630px) | WIRED → /public/og.png — swap with ImageSmith-branded card when ready
         // PROMPT (background layer, composite in Figma): seamless dark tech micro-texture background, deep navy #0d0f14, extremely subtle 1px grid lines at 4% opacity forming a fine circuit-board mesh, zero gradients, zero glows, flat and even, suitable as a layer beneath typography, high resolution 1200x630px, professional minimal dark brand aesthetic, no text, no icons, no logos, pure background tile
         url: `${APP_URL}/og.png`,
         width: 1200,
