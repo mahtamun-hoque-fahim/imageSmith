@@ -45,7 +45,7 @@ export default function HomePage() {
 
         {/* IMAGE-BRIEF: hero-01 | 16:9 | WIRED → /public/images/hero.png — swap with 2560×1440 final render when ready */}
         {/* PROMPT: cinematic 3D product visualization, floating translucent file cards labeled JPG and PNG on the left gently dissolving and morphing into crisp WebP format cards on the right, deep dark navy background, volumetric indigo-violet glow radiating softly from the WebP output cards, soft rim lighting from top-left, subtle geometric motion blur on the transforming cards, generous negative space at center, zero UI chrome, zero text, zero watermarks, hyper-detailed surface materials, octane render, 8K resolution, professional dark tech product aesthetic, award-winning CGI --ar 16:9 --style raw --q 2 */}
-        <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2">
+        <div className="animate-fade-up w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2" style={{ animationDelay: '120ms' }}>
           <img
             src="/images/hero.png"
             alt="JPG and PNG files transforming into WebP format"
@@ -65,7 +65,7 @@ export default function HomePage() {
 
           {/* IMAGE-BRIEF: feat-01 | 3:1 | WIRED → /public/images/feat-flow.png — swap with 2400×800 final render when ready */}
           {/* PROMPT: clean flat isometric vector illustration, horizontal flow diagram, left side shows a varied stack of image file format icons (JPG PNG GIF BMP) with subtle size variation, center has a minimal conversion funnel or arrow, right side shows a single ZIP archive file with an expanded nested folder tree floating beside it preserving the exact directory hierarchy, indigo-violet accent color on the ZIP output and folder nodes, desaturated muted blue-gray fine lines for folder path connectors, deep dark navy background, zero text labels, zero numbers, zero UI chrome, technical but approachable aesthetic, generous negative space top and bottom, precise vector-clean edges, high contrast, professional --ar 3:1 --style raw */}
-          <div className="w-full rounded-xl overflow-hidden">
+          <div className="animate-fade-in w-full rounded-xl overflow-hidden">
             <img
               src="/images/feat-flow.png"
               alt="Image files converting to WebP with folder structure preserved"
