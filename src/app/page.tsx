@@ -42,6 +42,12 @@ export default function HomePage() {
           <span className="font-mono text-text">.webp</span>. Nothing leaves
           your machine. No account required.
         </p>
+
+        {/* IMAGE-BRIEF: hero-01 | 16:9 | abstract 3D render — floating JPG/PNG file cards on left dissolving into .webp cards on right, dark bg-surface background, accent glow on WebP output cards, soft volumetric light from top-left, no baked-in text, generous negative space */}
+        <div
+          data-image-slot="hero-01"
+          className="w-full max-w-2xl aspect-video rounded-xl border border-dashed border-border bg-surface/40 mt-2"
+        />
       </section>
 
       {/* Converter */}
@@ -51,7 +57,16 @@ export default function HomePage() {
 
       {/* Features */}
       <section className="border-t border-border">
-        <div className="max-w-4xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col gap-12">
+
+          {/* IMAGE-BRIEF: feat-01 | 3:1 | minimal flat line illustration — image files entering left, ZIP exiting right with visible nested folder tree intact, accent color for the output ZIP, text-muted lines for folder structure, bg-surface background, no labels or text baked in */}
+          <div
+            data-image-slot="feat-01"
+            className="w-full rounded-xl border border-dashed border-border bg-surface/40"
+            style={{ aspectRatio: '3 / 1' }}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {FEATURES.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex flex-col gap-3">
               <div className="w-9 h-9 rounded-lg bg-accent-faint flex items-center justify-center">
@@ -61,6 +76,7 @@ export default function HomePage() {
               <p className="text-text-muted text-sm leading-relaxed">{desc}</p>
             </div>
           ))}
+          </div>
         </div>
       </section>
 

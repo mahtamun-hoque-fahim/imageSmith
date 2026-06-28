@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     url: APP_URL,
     images: [
       {
+        // IMAGE-BRIEF: og-01 | 1.91:1 (1200x630px) | dark bg-surface brand card — ImageSmith wordmark in Syne 700 top-left, tagline "Free Batch WebP Converter" in Inter below, 4px accent bar at bottom edge, text-muted subtitle "Your files never leave your device", no gradients, no photos — save as /public/og.png
         url: `${APP_URL}/og.png`,
         width: 1200,
         height: 630,
