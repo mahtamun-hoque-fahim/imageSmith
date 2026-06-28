@@ -73,17 +73,29 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 ## Current State
 
 ```
-Status: Alpha
-Last updated: 2026-06-27
+Status: V1 built — awaiting deploy
+Last updated: 2026-06-28
 
 What works:
-- Nothing yet — project just anchored
+- Full converter UI (single file, batch, folder, ZIP input)
+- libwebp WASM loaded from /public/wasm via script-tag injection
+- JSZip folder-structure-preserving output ZIP
+- Chunked batch processing (10 images at a time)
+- Firefox ZIP fallback path with clear browser notice
+- Quality slider (1–100)
+- /api/reviews — GET + POST with Upstash Redis rate limiting (1/hr per IP)
+- Neon + Drizzle reviews table (reviews only, no other DB usage)
+- Full POST-BUILD pipeline: waterborne, motion-hive, valley-of-death complete
+- Build: PASS (0 TS errors, 0 Turbopack errors)
 
 What's broken or incomplete:
-- Everything — build not started
+- Neon + Upstash env vars not yet set (blocking deploy)
+- @opennextjs/cloudflare deploy not yet attempted
+- sentinel, airborne, humanizer, cave-man, council POST still pending
 
-What's next (in spirit, not tasks):
-- Scaffold repo, build converter core, deploy V1
+What's next:
+- sentinel (security audit) — Step 4 in POST pipeline
+- Set Neon + Upstash env vars → deploy to Vercel → test WASM CSP headers live
 ```
 
 ---

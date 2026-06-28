@@ -1,7 +1,6 @@
-// open-next.config.ts — built with: npx @opennextjs/cloudflare build
-// Install @opennextjs/cloudflare before deploying to Cloudflare Workers
+import type { OpenNextConfig } from '@opennextjs/cloudflare'
 
-const config = {
+const config: OpenNextConfig = {
   default: {
     override: {
       wrapper: 'cloudflare-node',
