@@ -56,7 +56,7 @@ export default function HomePage() {
             alt="JPG and PNG files transforming into WebP format"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 80px 32px #0d0f14' }} />
+          <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 80px 32px #0A0D15' }} />
         </div>
       </section>
 
