@@ -24,6 +24,11 @@ const FEATURES = [
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-bg">
+      {/* Nav */}
+      <nav className="max-w-4xl mx-auto px-6 pt-6 pb-2 flex items-center">
+        <img src="/logo.svg" alt="ImageSmith" className="h-8" />
+      </nav>
+
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center flex flex-col items-center gap-6">
         <div className="inline-flex items-center gap-2 bg-accent-faint border border-accent/20 rounded-full px-4 py-1.5 text-xs font-mono text-accent">

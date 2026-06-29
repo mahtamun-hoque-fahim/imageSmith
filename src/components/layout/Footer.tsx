@@ -6,9 +6,7 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* About the tool */}
         <div className="flex flex-col gap-4">
-          <h3 className="font-syne font-semibold text-text text-lg">
-            ImageSmith
-          </h3>
+          <img src="/logo.svg" alt="ImageSmith" className="h-7" />
           <p className="text-text-muted text-sm leading-relaxed">
             A free WebP converter that runs entirely in your browser. Drop a
             folder of 1000 images, get back a ZIP with the same folder tree
