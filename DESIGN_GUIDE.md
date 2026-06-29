@@ -11,7 +11,7 @@ CSS variables in `app/globals.css` (Tailwind v4 — tokens auto-promote to utili
 
 @theme {
   /* Surfaces */
-  --color-bg: #0d0f14;
+  --color-bg: #0A0D15;
   --color-surface: #13161f;
   --color-surface-elevated: #1a1d28;
   --color-border: #1e2030;
@@ -192,7 +192,7 @@ Always wrap motion in `prefers-reduced-motion`:
 
 Dark-first. No light mode.
 
-- Never use pure `#000000` for background — use `--color-bg` (#0d0f14)
+- Never use pure `#000000` for background — use `--color-bg` (#0A0D15)
 - Never use pure `#ffffff` for text — use `--color-text` (#eef0ff)
 - Elevation = surface lightness: bg → surface → surface-elevated
 - Glow effects via `--shadow-glow` on accent elements only
