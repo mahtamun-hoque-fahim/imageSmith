@@ -1,5 +1,9 @@
 # ImageSmith
 
+![Version](https://img.shields.io/github/v/release/mahtamun-hoque-fahim/imageSmith?style=flat-square&color=6d66f5)
+![License](https://img.shields.io/github/license/mahtamun-hoque-fahim/imageSmith?style=flat-square)
+![Stars](https://img.shields.io/github/stars/mahtamun-hoque-fahim/imageSmith?style=flat-square)
+
 Free, client-side image-to-WebP converter. Drop a folder of 1000 images, get back an identical ZIP with everything converted — folder structure preserved.
 
 ## Stack
