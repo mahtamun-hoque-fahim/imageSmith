@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               isDev
                 ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'"
-                : "script-src 'self' 'wasm-unsafe-eval'",
+                : "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' blob: data:",
               "connect-src 'self'",
