@@ -50,12 +50,13 @@ export default function HomePage() {
 
         {/* IMAGE-BRIEF: hero-01 | 16:9 | WIRED → /public/images/hero.png — swap with 2560×1440 final render when ready */}
         {/* PROMPT: cinematic 3D product visualization, floating translucent file cards labeled JPG and PNG on the left gently dissolving and morphing into crisp WebP format cards on the right, deep dark navy background, volumetric indigo-violet glow radiating softly from the WebP output cards, soft rim lighting from top-left, subtle geometric motion blur on the transforming cards, generous negative space at center, zero UI chrome, zero text, zero watermarks, hyper-detailed surface materials, octane render, 8K resolution, professional dark tech product aesthetic, award-winning CGI --ar 16:9 --style raw --q 2 */}
-        <div className="animate-fade-up w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2" style={{ animationDelay: '120ms' }}>
+        <div className="relative animate-fade-up w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2" style={{ animationDelay: '120ms' }}>
           <img
             src="/images/hero.png"
             alt="JPG and PNG files transforming into WebP format"
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 80px 32px #0d0f14' }} />
         </div>
       </section>
 
