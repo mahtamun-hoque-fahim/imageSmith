@@ -46,7 +46,7 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 
 | Token | Value | Usage |
 |---|---|---|
-| `bg` | #0d0f14 | Page background |
+| `bg` | #0A0D15 | Page background |
 | `surface` | #13161f | Card, panel, input backgrounds |
 | `surface-elevated` | #1a1d28 | Raised elements, dropdowns |
 | `accent` | #6d66f5 | Primary actions, links, glows |
