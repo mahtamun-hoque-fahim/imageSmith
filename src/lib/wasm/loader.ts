@@ -1,5 +1,7 @@
 'use client'
 
+import defaultEncodeOptions from '@saschazar/wasm-webp/options'
+
 export const SUPPORTED_EXTENSIONS = new Set([
   '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.tif', '.webp', '.avif',
 ])
@@ -118,6 +120,12 @@ export async function encodeToWebP(
     getWebPEncoder(),
     fileToRGBA(file),
   ])
-  const result = module.encode(data, width, height, 4, { quality }) as ArrayBufferView
+  const result = module.encode(
+    data,
+    width,
+    height,
+    4,
+    { ...defaultEncodeOptions, quality }
+  ) as ArrayBufferView
   return new Uint8Array(result.buffer, result.byteOffset, result.byteLength)
 }
