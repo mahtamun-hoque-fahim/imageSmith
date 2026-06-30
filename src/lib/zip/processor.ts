@@ -141,5 +141,5 @@ export function downloadBlob(blob: Blob, filename: string): void {
 }
 
 export function downloadBytes(bytes: Uint8Array, filename: string): void {
-  downloadBlob(new Blob([bytes.buffer as ArrayBuffer], { type: "image/webp" }), filename)
+  downloadBlob(new Blob([bytes.slice()], { type: "image/webp" }), filename)
 }
