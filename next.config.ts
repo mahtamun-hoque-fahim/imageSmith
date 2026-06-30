@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   reactCompiler: false,
 
   headers: async () => {
-    const isDev = process.env.NODE_ENV === 'development'
     return [
       {
         source: '/(.*)',
@@ -14,9 +13,12 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              isDev
-                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'"
-                : "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
+              // 'unsafe-eval' is required in both envs: the libwebp WASM
+              // module's embind runtime uses new Function() internally
+              // (createNamedFunction/extendError, for its custom error
+              // classes) -- this is JS-level eval, not WASM compile, so
+              // 'wasm-unsafe-eval' alone does not cover it.
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' blob: data:",
               "connect-src 'self'",
