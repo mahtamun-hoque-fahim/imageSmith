@@ -19,11 +19,11 @@ const nextConfig: NextConfig = {
               // classes) -- this is JS-level eval, not WASM compile, so
               // 'wasm-unsafe-eval' alone does not cover it.
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com",
               "img-src 'self' blob: data:",
               "connect-src 'self'",
               "worker-src 'self' blob:",
-              "font-src 'self' https://fonts.gstatic.com",
+              "font-src 'self' https://fonts.gstatic.com https://cdn.fontshare.com",
             ].join('; '),
           },
           {

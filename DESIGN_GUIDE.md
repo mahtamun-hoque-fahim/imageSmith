@@ -43,7 +43,7 @@ CSS variables in `app/globals.css` (Tailwind v4 — tokens auto-promote to utili
 ## Typography
 
 **Families** (loaded via `next/font` in `app/layout.tsx`):
-- Display: Syne (`--font-syne`) — h1, h2, hero text, section headers
+- Display: Clash Display (`--font-display`, via Fontshare CDN) — h1, h2, hero text, section headers
 - Body: Inter (`--font-inter`) — default for all body copy, labels, UI text
 - Mono: JetBrains Mono (`--font-mono`) — file names, paths, counters, conversion stats
 

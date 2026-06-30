@@ -35,7 +35,7 @@ export default function HomePage() {
           libwebp WASM &middot; 100% client-side &middot; free
         </div>
 
-        <h1 className="font-syne font-bold text-4xl md:text-6xl text-text leading-tight tracking-tight">
+        <h1 className="font-display font-bold text-4xl md:text-6xl text-text leading-tight tracking-tight">
           Convert images to WebP.
           <br />
           <span className="text-accent">Keep your folders intact.</span>
@@ -86,7 +86,7 @@ export default function HomePage() {
               <div className="w-9 h-9 rounded-lg bg-accent-faint flex items-center justify-center">
                 <Icon className="w-5 h-5 text-accent" />
               </div>
-              <h3 className="font-syne font-semibold text-text">{title}</h3>
+              <h3 className="font-display font-semibold text-text">{title}</h3>
               <p className="text-text-muted text-sm leading-relaxed">{desc}</p>
             </div>
           ))}

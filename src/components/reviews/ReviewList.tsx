@@ -37,7 +37,7 @@ export default function ReviewList() {
     <div id="reviews" className="flex flex-col gap-8">
       <div className="flex items-center gap-2">
         <MessageSquare className="w-5 h-5 text-accent" />
-        <h2 className="text-xl font-syne font-semibold text-text">
+        <h2 className="text-xl font-display font-semibold text-text">
           Reviews
         </h2>
       </div>

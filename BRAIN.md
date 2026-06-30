@@ -53,7 +53,7 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 | `accent-faint` | #6d66f51a | Ring/border accent at 10% opacity |
 | `border` | #1e2030 | Default border colour |
 | `text` | #eef0ff | Primary text |
-| Font (display) | Syne | Headings |
+| Font (display) | Clash Display | Headings |
 | Font (body) | Inter | Body copy |
 | Font (mono) | JetBrains Mono | File names, paths, numbers |
 

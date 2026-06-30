@@ -25,7 +25,7 @@ export default function Footer() {
 
         {/* About the developer */}
         <div className="flex flex-col gap-4">
-          <h3 className="font-syne font-semibold text-text text-lg">
+          <h3 className="font-display font-semibold text-text text-lg">
             Built by Fahim
           </h3>
           <p className="text-text-muted text-sm leading-relaxed">
