@@ -112,7 +112,7 @@ export default function ConverterZone() {
         } else {
           const blob = await buildOutputZip(results)
           setResultBlob(blob)
-          setResultFilename('imagesmith-output.zip')
+          setResultFilename('webp-converted-images[ImageSmith].zip')
         }
 
         setConvertState('done')

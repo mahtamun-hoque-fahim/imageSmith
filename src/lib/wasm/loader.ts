@@ -127,5 +127,11 @@ export async function encodeToWebP(
     4,
     { ...defaultEncodeOptions, quality }
   ) as ArrayBufferView
-  return new Uint8Array(result.buffer, result.byteOffset, result.byteLength)
+  // Copy BEFORE free() — free() releases the heap allocation the view points into.
+  // Also copies out of the shared WASM heap so concurrent batch encodes can't
+  // overwrite each other's results.
+  const copied = new Uint8Array(result.buffer, result.byteOffset, result.byteLength).slice()
+  module.free() // Required: releases internal result buffer. Without this, heap
+                // fills up across batch calls → "index out of bounds" at ~20-30 images.
+  return copied
 }
