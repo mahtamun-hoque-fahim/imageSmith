@@ -92,6 +92,11 @@ export async function fileToRGBA(file: File): Promise<{
         return
       }
       ctx.drawImage(img, 0, 0)
+      if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+        URL.revokeObjectURL(url)
+        reject(new Error(`Cannot decode image: ${file.name} (unsupported format or corrupt file)`))
+        return
+      }
       const imageData = ctx.getImageData(0, 0, img.naturalWidth, img.naturalHeight)
       URL.revokeObjectURL(url)
       resolve({
@@ -127,11 +132,11 @@ export async function encodeToWebP(
     4,
     { ...defaultEncodeOptions, quality }
   ) as ArrayBufferView
-  // Copy BEFORE free() — free() releases the heap allocation the view points into.
-  // Also copies out of the shared WASM heap so concurrent batch encodes can't
-  // overwrite each other's results.
-  const copied = new Uint8Array(result.buffer, result.byteOffset, result.byteLength).slice()
-  module.free() // Required: releases internal result buffer. Without this, heap
-                // fills up across batch calls → "index out of bounds" at ~20-30 images.
-  return copied
+  // .slice() copies immediately out of the WASM heap into an independent
+  // ArrayBuffer before the heap can be reused by the next encode() call.
+  // NOTE: module.free() is intentionally NOT called here. On this module,
+  // free() appears to invalidate the encoder's internal state, causing all
+  // subsequent encode() calls on the singleton to throw 'index out of bounds'.
+  // The WASM allocator reclaims the result buffer memory on the next encode().
+  return new Uint8Array(result.buffer, result.byteOffset, result.byteLength).slice()
 }

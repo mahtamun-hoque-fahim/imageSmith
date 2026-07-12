@@ -73,7 +73,7 @@ function guessType(name: string): string {
 
 // ---------- Conversion ----------
 
-const CHUNK_SIZE = 10 // process N images at a time
+const CHUNK_SIZE = 3 // keep heap pressure low — module state is shared across encodes
 
 export async function convertFiles(
   files: FileWithPath[],
@@ -90,7 +90,16 @@ export async function convertFiles(
       chunk.map(async ({ file, relativePath }) => {
         onProgress({ done, total: files.length, currentFile: file.name })
 
-        const webpBytes = await encodeToWebP(file, quality)
+        let webpBytes: Uint8Array
+        try {
+          webpBytes = await encodeToWebP(file, quality)
+        } catch (e) {
+          // Skip unsupported/corrupt files — don't crash the whole batch
+          console.warn(`Skipping ${file.name}:`, e instanceof Error ? e.message : e)
+          done++
+          onProgress({ done, total: files.length, currentFile: file.name })
+          return null
+        }
 
         // Replace extension with .webp
         const webpPath = relativePath.replace(/\.[^.]+$/, '.webp')
@@ -107,7 +116,11 @@ export async function convertFiles(
       })
     )
 
-    results.push(...chunkResults)
+    results.push(...chunkResults.filter((r): r is ConversionResult => r !== null))
+  }
+
+  if (results.length === 0) {
+    throw new Error('No images could be converted. Check that files are valid and in a supported format.')
   }
 
   return results
