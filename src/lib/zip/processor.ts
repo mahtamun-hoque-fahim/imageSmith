@@ -73,8 +73,6 @@ function guessType(name: string): string {
 
 // ---------- Conversion ----------
 
-const CHUNK_SIZE = 3 // keep heap pressure low — module state is shared across encodes
-
 export async function convertFiles(
   files: FileWithPath[],
   quality: number,
@@ -83,40 +81,34 @@ export async function convertFiles(
   const results: ConversionResult[] = []
   let done = 0
 
-  for (let i = 0; i < files.length; i += CHUNK_SIZE) {
-    const chunk = files.slice(i, i + CHUNK_SIZE)
+  // Sequential — NOT concurrent. The WASM module has a 16MB initial heap
+  // and permanently sets ABORT=true on any memory fault. Concurrent encodes
+  // via Promise.all cause heap contention that triggers this, permanently
+  // breaking the singleton for the rest of the session. One at a time is
+  // the only safe pattern for this module.
+  for (const { file, relativePath } of files) {
+    onProgress({ done, total: files.length, currentFile: file.name })
 
-    const chunkResults = await Promise.all(
-      chunk.map(async ({ file, relativePath }) => {
-        onProgress({ done, total: files.length, currentFile: file.name })
+    let webpBytes: Uint8Array
+    try {
+      webpBytes = await encodeToWebP(file, quality)
+    } catch (e) {
+      console.warn(`Skipping ${file.name}:`, e instanceof Error ? e.message : e)
+      done++
+      onProgress({ done, total: files.length, currentFile: file.name })
+      continue
+    }
 
-        let webpBytes: Uint8Array
-        try {
-          webpBytes = await encodeToWebP(file, quality)
-        } catch (e) {
-          // Skip unsupported/corrupt files — don't crash the whole batch
-          console.warn(`Skipping ${file.name}:`, e instanceof Error ? e.message : e)
-          done++
-          onProgress({ done, total: files.length, currentFile: file.name })
-          return null
-        }
+    const webpPath = relativePath.replace(/\.[^.]+$/, '.webp')
+    done++
+    onProgress({ done, total: files.length, currentFile: file.name })
 
-        // Replace extension with .webp
-        const webpPath = relativePath.replace(/\.[^.]+$/, '.webp')
-
-        done++
-        onProgress({ done, total: files.length, currentFile: file.name })
-
-        return {
-          relativePath: webpPath,
-          webpBytes,
-          originalSize: file.size,
-          webpSize: webpBytes.byteLength,
-        } satisfies ConversionResult
-      })
-    )
-
-    results.push(...chunkResults.filter((r): r is ConversionResult => r !== null))
+    results.push({
+      relativePath: webpPath,
+      webpBytes,
+      originalSize: file.size,
+      webpSize: webpBytes.byteLength,
+    })
   }
 
   if (results.length === 0) {
