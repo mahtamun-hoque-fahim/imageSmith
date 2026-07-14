@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MessageSquare, Loader2 } from 'lucide-react'
+import { MessageSquare, Loader2, Star } from 'lucide-react'
 import ReviewForm from './ReviewForm'
 import type { Review } from '@/lib/db/schema'
 
@@ -67,6 +67,18 @@ export default function ReviewList() {
               className="animate-fade-up bg-surface border border-border rounded-lg px-5 py-4 flex flex-col gap-2"
               style={{ animationDelay: `${i * 40}ms` }}
             >
+              <div className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <Star
+                    key={n}
+                    className="w-3.5 h-3.5"
+                    style={{
+                      color: n <= (r.rating ?? 5) ? '#6d66f5' : '#4a5070',
+                      fill: n <= (r.rating ?? 5) ? '#6d66f5' : 'transparent',
+                    }}
+                  />
+                ))}
+              </div>
               <p className="text-text text-sm leading-relaxed">{r.content}</p>
               <span className="text-text-faint text-xs font-mono">
                 {timeAgo(new Date(r.createdAt))}

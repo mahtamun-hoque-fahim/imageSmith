@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle, Loader2, Star } from 'lucide-react'
 import type { Review } from '@/lib/db/schema'
 
 interface ReviewFormProps {
@@ -12,11 +12,17 @@ const MAX_CHARS = 500
 
 export default function ReviewForm({ onSubmit }: ReviewFormProps) {
   const [content, setContent] = useState('')
+  const [rating, setRating] = useState(0)
+  const [hovered, setHovered] = useState(0)
   const [state, setState] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   const remaining = MAX_CHARS - content.length
-  const canSubmit = content.trim().length > 0 && remaining >= 0 && state === 'idle'
+  const canSubmit =
+    content.trim().length > 0 &&
+    remaining >= 0 &&
+    rating >= 1 &&
+    state === 'idle'
 
   async function handleSubmit() {
     if (!canSubmit) return
@@ -28,7 +34,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
       const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content, rating }),
       })
 
       if (!res.ok) {
@@ -39,9 +45,8 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
       const review: Review = await res.json()
       onSubmit(review)
       setContent('')
+      setRating(0)
       setState('done')
-
-      // Reset to idle after 4 seconds
       setTimeout(() => setState('idle'), 4000)
     } catch (e) {
       setErrorMsg(e instanceof Error ? e.message : 'Submission failed')
@@ -50,11 +55,43 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
     }
   }
 
+  const displayRating = hovered || rating
+
   return (
     <div className="flex flex-col gap-3">
       <label className="text-sm text-text-muted" htmlFor="review-input">
         Leave a review
       </label>
+
+      {/* Star picker */}
+      <div
+        className="flex items-center gap-1"
+        onMouseLeave={() => setHovered(0)}
+      >
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            onClick={() => setRating(n)}
+            onMouseEnter={() => setHovered(n)}
+            disabled={state === 'submitting' || state === 'done'}
+            className="p-0.5 transition-transform duration-100 hover:scale-110 active:scale-95 disabled:cursor-not-allowed"
+            aria-label={`Rate ${n} star${n !== 1 ? 's' : ''}`}
+          >
+            <Star
+              className="w-6 h-6 transition-colors duration-100"
+              style={{
+                color: n <= displayRating ? '#6d66f5' : '#4a5070',
+                fill: n <= displayRating ? '#6d66f5' : 'transparent',
+              }}
+            />
+          </button>
+        ))}
+        {rating > 0 && (
+          <span className="ml-2 text-xs font-mono text-text-muted">
+            {['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'][rating]}
+          </span>
+        )}
+      </div>
 
       <textarea
         id="review-input"

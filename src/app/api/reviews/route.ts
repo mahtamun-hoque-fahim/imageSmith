@@ -88,13 +88,24 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const rawRating = (body as Record<string, unknown>).rating
+  if (
+    typeof rawRating !== 'number' ||
+    !Number.isInteger(rawRating) ||
+    rawRating < 1 ||
+    rawRating > 5
+  ) {
+    return NextResponse.json({ error: 'rating must be an integer between 1 and 5' }, { status: 400 })
+  }
+  const rating = rawRating
+
   const content = sanitize(raw)
 
   try {
     const db = getDb()
     const [row] = await db
       .insert(reviews)
-      .values({ id: nanoid(), content })
+      .values({ id: nanoid(), content, rating })
       .returning()
 
     return NextResponse.json(row, { status: 201 })
