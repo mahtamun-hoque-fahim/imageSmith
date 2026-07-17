@@ -6,18 +6,18 @@ import ConverterWrapper from '@/components/converter/ConverterWrapper'
 const FEATURES = [
   {
     icon: Lock,
-    title: 'Your files never upload',
-    desc: 'All conversion happens in your browser using libwebp. Nothing touches a server. Nothing leaves your device.',
+    title: 'No Server. No Upload.',
+    desc: 'All conversion happens in your browser using cutting-edge web technologies. Nothing touches a server. We don\'t know where is your camera is.',
   },
   {
     icon: FolderOpen,
     title: 'Folders come back whole',
-    desc: 'Drop a nested folder. The output ZIP mirrors it exactly — subfolders, filenames, everything. Only the extension changes.',
+    desc: 'Drop a nasty folder. The output ZIP mirrors it exactly — subfolders, filenames, everything. Only the fileextension changes.',
   },
   {
     icon: Zap,
     title: 'No paywall. No limits.',
-    desc: 'Convert 1000 images free. No account. No file size caps. Just drag, drop, download.',
+    desc: 'Even if you convert 1000 images, it\'s still free. No account. Just drag, drop, download andrun.',
   },
 ]
 
