@@ -1,6 +1,6 @@
 'use client'
 
-import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
+import { Zap, Lock, FolderOpen, Download, Folder } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
@@ -72,26 +72,8 @@ export default function HomePage() {
         </div>
 
         {/* Left decorative folder icon */}
-        <div className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2 w-48 h-48 md:w-72 md:h-72 opacity-100 pointer-events-none z-[1]">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            {/* Folder body with 3D effect */}
-            <defs>
-              <linearGradient id="folderBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#8b5cf6" />
-                <stop offset="100%" stopColor="#6d28d9" />
-              </linearGradient>
-              <linearGradient id="folderTop" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#a78bfa" />
-                <stop offset="100%" stopColor="#7c3aed" />
-              </linearGradient>
-            </defs>
-            {/* Folder tab */}
-            <path d="M 30 60 L 80 30 L 90 30 L 90 60 Z" fill="url(#folderTop)" />
-            {/* Folder body */}
-            <path d="M 30 60 L 170 60 L 170 160 C 170 170 160 180 150 180 L 50 180 C 40 180 30 170 30 160 Z" fill="url(#folderBody)" />
-            {/* Subtle 3D shadow */}
-            <path d="M 30 60 L 50 80 L 50 160 C 50 170 40 180 30 180 Z" fill="#5b21b6" opacity="0.6" />
-          </svg>
+        <div className="absolute left-8 md:left-16 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
+          <Folder className="w-48 h-48 md:w-64 md:h-64 text-purple-400 drop-shadow-[0_0_40px_rgba(192,132,250,0.6)] animate-pulse" />
         </div>
 
         {/* Right decorative ZIP icon */}
