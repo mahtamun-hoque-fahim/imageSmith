@@ -95,11 +95,11 @@ export default function HomePage() {
         </div>
 
         {/* Right decorative ZIP icon */}
-        <div className="absolute -right-16 md:right-0 bottom-12 md:bottom-20 w-64 h-64 md:w-96 md:h-96 opacity-100 pointer-events-none z-[1]">
+        <div className="absolute right-0 md:right-0 bottom-0 md:bottom-0 w-80 h-80 md:w-[32rem] md:h-[32rem] opacity-100 pointer-events-none z-[1]">
           <img
             src="/images/zip-icon.png"
             alt="ZIP file"
-            className="w-full h-full object-contain drop-shadow-2xl"
+            className="w-full h-full object-cover drop-shadow-2xl"
           />
         </div>
 
