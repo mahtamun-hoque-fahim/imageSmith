@@ -56,11 +56,11 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      <section className="relative w-screen min-h-screen flex items-center justify-center overflow-hidden bg-black -mx-6">
         {/* Background with parallax effect */}
         <div 
           ref={backgroundRef}
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 w-full h-full"
           style={{ transform: `translateY(${parallaxOffset}px)` }}
         >
           <img
