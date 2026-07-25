@@ -4,7 +4,7 @@ import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const FEATURES = [
   {
@@ -25,6 +25,14 @@ const FEATURES = [
 ]
 
 export default function HomePage() {
+  const [offset, setOffset] = useState(0)
+
+  useEffect(() => {
+    const onScroll = () => setOffset(window.scrollY * 0.4)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <main className="min-h-screen bg-bg overflow-x-hidden">
 
@@ -41,20 +49,31 @@ export default function HomePage() {
       {/* Hero */}
       <section
         className="relative w-full h-screen flex items-center justify-center overflow-hidden"
-        style={{ backgroundImage: 'url(/images/hero-bg-v2.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
-        {/* Left folder icon */}
+        {/* Background with parallax */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/images/hero-bg-v2.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            transform: `translateY(${offset}px)`,
+            willChange: 'transform',
+          }}
+        />
+
+        {/* Left folder icon — floating */}
         <img
           src="/images/folder-icon.png"
           alt="Folder"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float"
         />
 
-        {/* Right ZIP icon */}
+        {/* Right ZIP icon — floating offset */}
         <img
           src="/images/zip-icon.png"
           alt="ZIP"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float-delayed"
         />
 
         {/* Text content */}
