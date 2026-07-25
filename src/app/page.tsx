@@ -41,38 +41,42 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Background with waves */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <img
             src="/images/background.png"
             alt="Hero background"
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
         </div>
 
         {/* Left decorative folder icon */}
-        <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 w-32 h-32 md:w-48 md:h-48 opacity-90">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full filter drop-shadow-lg">
-            <path
-              d="M3 6.5c0-.93.75-1.675 1.675-1.675h10.65c.93 0 1.675.745 1.675 1.675V17c0 .93-.745 1.675-1.675 1.675H4.675C3.745 18.675 3 17.93 3 17V6.5Z"
-              stroke="url(#folderGrad)" strokeWidth="1.5" fill="url(#folderFill)"
-            />
+        <div className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2 w-48 h-48 md:w-72 md:h-72 opacity-100 pointer-events-none z-[1]">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            {/* Folder body with 3D effect */}
             <defs>
-              <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#a78bfa" />
-                <stop offset="100%" stopColor="#6366f1" />
+              <linearGradient id="folderBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#8b5cf6" />
+                <stop offset="100%" stopColor="#6d28d9" />
               </linearGradient>
-              <linearGradient id="folderFill" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="#6366f1" stopOpacity="0.05" />
+              <linearGradient id="folderTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a78bfa" />
+                <stop offset="100%" stopColor="#7c3aed" />
               </linearGradient>
             </defs>
+            {/* Folder tab */}
+            <path d="M 30 60 L 80 30 L 90 30 L 90 60 Z" fill="url(#folderTop)" />
+            {/* Folder body */}
+            <path d="M 30 60 L 170 60 L 170 160 C 170 170 160 180 150 180 L 50 180 C 40 180 30 170 30 160 Z" fill="url(#folderBody)" />
+            {/* Subtle 3D shadow */}
+            <path d="M 30 60 L 50 80 L 50 160 C 50 170 40 180 30 180 Z" fill="#5b21b6" opacity="0.6" />
           </svg>
         </div>
 
         {/* Right decorative ZIP icon */}
-        <div className="absolute right-6 md:right-12 top-1/3 w-40 h-40 md:w-56 md:h-56 opacity-95">
+        <div className="absolute -right-16 md:right-0 bottom-12 md:bottom-20 w-64 h-64 md:w-96 md:h-96 opacity-100 pointer-events-none z-[1]">
           <img
             src="/images/zip-icon.png"
             alt="ZIP file"
@@ -81,15 +85,17 @@ export default function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 text-center flex flex-col items-center gap-8 px-6 max-w-3xl">
-          <p className="text-text text-lg font-medium tracking-wide">Rapid Conversion</p>
-          <h1 className="font-display font-bold text-5xl md:text-7xl text-text leading-tight">
-            to <span className="text-white ml-2">.WEBP</span>
-          </h1>
+        <div className="relative z-20 text-center flex flex-col items-center gap-12 px-6 max-w-4xl">
+          <div className="space-y-6">
+            <p className="text-white text-xl md:text-2xl font-medium tracking-wider">Rapid Conversion</p>
+            <h1 className="font-display font-bold text-6xl md:text-8xl text-white leading-none">
+              to <span className="text-white block md:inline-block mt-2 md:mt-0">.WEBP</span>
+            </h1>
+          </div>
 
           {/* CTA Button */}
-          <button className="mt-8 px-10 py-4 bg-white text-black rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-150 flex items-center gap-3 shadow-xl hover:shadow-2xl">
-            <Download className="w-5 h-5" />
+          <button className="mt-6 px-12 py-5 bg-white text-black rounded-xl font-semibold text-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 flex items-center gap-3 shadow-2xl hover:shadow-[0_20px_60px_rgba(255,255,255,0.3)] border-0 outline-none cursor-pointer">
+            <Download className="w-6 h-6" />
             Drop Your Files
           </button>
         </div>
