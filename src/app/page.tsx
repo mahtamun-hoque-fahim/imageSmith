@@ -39,26 +39,22 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-bg overflow-x-hidden">
-      {/* Sticky Nav */}
-      <nav className="sticky top-0 z-50 px-6 py-6 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10">
+
+      {/* Fixed Nav - floats over the hero */}
+      <nav className="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between backdrop-blur-md bg-black/30 border-b border-white/5">
         <img src="/logo.svg" alt="ImageSmith" className="h-8" />
-        <div className="flex items-center gap-8 text-text">
-          <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">
-            About
-          </a>
-          <a href="#contact" className="text-sm font-medium hover:text-accent transition-colors">
-            Contact
-          </a>
-          <a href="#privacy" className="text-sm font-medium hover:text-accent transition-colors">
-            Privacy Policy
-          </a>
+        <div className="flex items-center gap-8 text-white">
+          <a href="#about" className="text-sm font-medium hover:opacity-70 transition-opacity">About</a>
+          <a href="#contact" className="text-sm font-medium hover:opacity-70 transition-opacity">Contact</a>
+          <a href="#privacy" className="text-sm font-medium hover:opacity-70 transition-opacity">Privacy Policy</a>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black">
-        {/* Background with parallax effect */}
-        <div 
+      {/* Hero - full 100vh from very top, behind nav */}
+      <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-black">
+
+        {/* Background with parallax */}
+        <div
           ref={backgroundRef}
           className="absolute inset-0 z-0 w-full h-full"
           style={{ transform: `translateY(${parallaxOffset}px)` }}
@@ -66,46 +62,41 @@ export default function HomePage() {
           <img
             src="/images/background.png"
             alt="Hero background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
-        </div>
-
-        {/* Left decorative folder icon */}
-        <div className="absolute left-8 md:left-16 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
-          <img 
-            src="/images/folder-icon.png" 
-            alt="Folder" 
-            className="w-48 h-48 md:w-64 md:h-64 drop-shadow-[0_0_40px_rgba(168,107,207,0.8)]"
+            className="w-full h-full object-cover object-center"
           />
         </div>
 
-        {/* Right decorative ZIP icon */}
-        <div className="absolute right-0 md:right-0 bottom-0 md:bottom-0 w-80 h-80 md:w-[32rem] md:h-[32rem] opacity-100 pointer-events-none z-[1]">
+        {/* Left folder icon */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
+          <img
+            src="/images/folder-icon.png"
+            alt="Folder"
+            className="w-64 h-64 md:w-80 md:h-80 drop-shadow-[0_0_60px_rgba(168,107,207,0.9)]"
+          />
+        </div>
+
+        {/* Right ZIP icon */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
           <img
             src="/images/zip-icon.png"
             alt="ZIP file"
-            className="w-full h-full object-cover drop-shadow-2xl"
+            className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-2xl"
           />
         </div>
 
         {/* Content */}
-        <div className="relative z-20 text-center flex flex-col items-center gap-12 px-6 max-w-4xl">
-          <div className="space-y-6">
-            <p className="text-white text-xl md:text-2xl font-medium tracking-wider">Rapid Conversion</p>
-            <h1 className="font-display font-bold text-6xl md:text-8xl text-white leading-none">
-              to <span className="text-white block md:inline-block mt-2 md:mt-0">.WEBP</span>
-            </h1>
-          </div>
-
-          {/* CTA Button */}
-          <button 
+        <div className="relative z-20 text-center flex flex-col items-center gap-8 px-6 max-w-3xl">
+          <p className="text-white/80 text-lg md:text-xl font-medium tracking-widest uppercase">Rapid Conversion</p>
+          <h1 className="font-display font-bold text-7xl md:text-9xl text-white leading-none tracking-tight">
+            to .WEBP
+          </h1>
+          <button
             onClick={() => {
-              const converterSection = document.getElementById('converter-section')
-              converterSection?.scrollIntoView({ behavior: 'smooth' })
+              document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="mt-6 px-12 py-5 bg-white text-black rounded-xl font-semibold text-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 flex items-center gap-3 shadow-2xl hover:shadow-[0_20px_60px_rgba(255,255,255,0.3)] border-0 outline-none cursor-pointer">
-            <Download className="w-6 h-6" />
+            className="mt-4 px-14 py-5 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-3 shadow-2xl border-0 outline-none cursor-pointer"
+          >
+            <Download className="w-5 h-5" />
             Drop Your Files
           </button>
         </div>
