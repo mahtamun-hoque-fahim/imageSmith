@@ -1,12 +1,9 @@
 export default function Footer() {
   return (
-    <footer className="relative border-t border-border mt-24 overflow-hidden">
-      {/* Background image bottom left */}
-      <img
-        src="/images/footer-bg.png"
-        alt=""
-        className="absolute bottom-0 left-0 w-[600px] pointer-events-none select-none opacity-80"
-      />
+    <footer
+      className="relative border-t border-border mt-24"
+      style={{ backgroundImage: 'url(/images/footer-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         <div className="flex flex-col gap-4 max-w-sm">
