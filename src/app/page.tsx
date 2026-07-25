@@ -63,7 +63,7 @@ export default function HomePage() {
           <h1 className="font-display font-bold text-8xl text-white leading-none">to .WEBP</h1>
           <button
             onClick={() => document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="mt-4 px-14 py-5 bg-white text-black rounded-xl font-bold text-lg flex items-center gap-3 cursor-pointer border-0"
+            className="mt-4 px-14 py-5 bg-white text-black font-bold text-lg flex items-center gap-3 cursor-pointer border-0"
           >
             <Download className="w-5 h-5" />
             Drop Your Files
