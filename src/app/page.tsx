@@ -38,7 +38,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-bg">
+    <main className="min-h-screen bg-bg overflow-x-hidden">
       {/* Sticky Nav */}
       <nav className="sticky top-0 z-50 px-6 py-6 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10">
         <img src="/logo.svg" alt="ImageSmith" className="h-8" />
@@ -56,7 +56,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative w-screen min-h-screen flex items-center justify-center overflow-hidden bg-black -mx-6">
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Background with parallax effect */}
         <div 
           ref={backgroundRef}
