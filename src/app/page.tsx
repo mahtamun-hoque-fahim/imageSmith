@@ -1,4 +1,4 @@
-import { Zap, Lock, FolderOpen } from 'lucide-react'
+import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
@@ -25,34 +25,73 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-bg">
       {/* Nav */}
-      <nav className="max-w-4xl mx-auto px-6 pt-6 pb-2 flex items-center">
+      <nav className="px-6 py-6 flex items-center justify-between">
         <img src="/logo.svg" alt="ImageSmith" className="h-8" />
+        <div className="flex items-center gap-8 text-text">
+          <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">
+            About
+          </a>
+          <a href="#contact" className="text-sm font-medium hover:text-accent transition-colors">
+            Contact
+          </a>
+          <a href="#privacy" className="text-sm font-medium hover:text-accent transition-colors">
+            Privacy Policy
+          </a>
+        </div>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center flex flex-col items-center gap-6">
-        <h1 className="font-display font-bold text-4xl md:text-6xl text-text leading-tight tracking-tight">
-          Convert images to WebP.
-          <br />
-          <span className="text-accent">Keep your folders intact.</span>
-        </h1>
-
-        <p className="text-text-muted text-lg max-w-xl leading-relaxed">
-          Drop a folder of 1000 images. Get back a ZIP with the same
-          structure — same names, just{' '}
-          <span className="font-mono text-text">.webp</span>. Nothing leaves
-          your machine. No account required.
-        </p>
-
-        {/* IMAGE-BRIEF: hero-01 | 16:9 | WIRED → /public/images/hero.png — swap with 2560×1440 final render when ready */}
-        {/* PROMPT: cinematic 3D product visualization, floating translucent file cards labeled JPG and PNG on the left gently dissolving and morphing into crisp WebP format cards on the right, deep dark navy background, volumetric indigo-violet glow radiating softly from the WebP output cards, soft rim lighting from top-left, subtle geometric motion blur on the transforming cards, generous negative space at center, zero UI chrome, zero text, zero watermarks, hyper-detailed surface materials, octane render, 8K resolution, professional dark tech product aesthetic, award-winning CGI --ar 16:9 --style raw --q 2 */}
-        <div className="relative animate-fade-up w-full max-w-2xl aspect-video rounded-xl overflow-hidden mt-2" style={{ animationDelay: '120ms' }}>
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        {/* Background with waves */}
+        <div className="absolute inset-0">
           <img
-            src="/images/hero.png"
-            alt="JPG and PNG files transforming into WebP format"
+            src="/images/background.png"
+            alt="Hero background"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 80px 32px #0A0D15' }} />
+        </div>
+
+        {/* Left decorative folder icon */}
+        <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 w-32 h-32 md:w-48 md:h-48 opacity-90">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full filter drop-shadow-lg">
+            <path
+              d="M3 6.5c0-.93.75-1.675 1.675-1.675h10.65c.93 0 1.675.745 1.675 1.675V17c0 .93-.745 1.675-1.675 1.675H4.675C3.745 18.675 3 17.93 3 17V6.5Z"
+              stroke="url(#folderGrad)" strokeWidth="1.5" fill="url(#folderFill)"
+            />
+            <defs>
+              <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a78bfa" />
+                <stop offset="100%" stopColor="#6366f1" />
+              </linearGradient>
+              <linearGradient id="folderFill" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.1" />
+                <stop offset="100%" stopColor="#6366f1" stopOpacity="0.05" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Right decorative ZIP icon */}
+        <div className="absolute right-6 md:right-12 top-1/3 w-40 h-40 md:w-56 md:h-56 opacity-95">
+          <img
+            src="/images/zip-icon.png"
+            alt="ZIP file"
+            className="w-full h-full object-contain drop-shadow-2xl"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center flex flex-col items-center gap-8 px-6 max-w-3xl">
+          <p className="text-text text-lg font-medium tracking-wide">Rapid Conversion</p>
+          <h1 className="font-display font-bold text-5xl md:text-7xl text-text leading-tight">
+            to <span className="text-white ml-2">.WEBP</span>
+          </h1>
+
+          {/* CTA Button */}
+          <button className="mt-8 px-10 py-4 bg-white text-black rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-150 flex items-center gap-3 shadow-xl hover:shadow-2xl">
+            <Download className="w-5 h-5" />
+            Drop Your Files
+          </button>
         </div>
       </section>
 

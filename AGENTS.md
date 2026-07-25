@@ -35,6 +35,13 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25
+- Session Start: `git config user.name "mahtamun-hoque-fahim"` & `git config user.email "mahtamunhoquefahim@gmail.com"`
+- Did: Complete hero UI redesign. Rebuilt nav (added About/Contact/Privacy links), removed hero image + description paragraph, replaced with dark background with blue wave pattern. Added decorative folder icon (left) + zip icon (right). New headline: "Rapid Conversion to .WEBP". White CTA button "Drop Your Files" with Download icon.
+- Assets: Copied background.png (dark hero with waves) and zip-icon.png to /public/images/. Folder icon implemented as inline SVG with gradient.
+- Kept: Converter, features, reviews, footer sections untouched.
+- Stack: Next.js 16, Tailwind v4, lucide-react (Download icon).
+
 ### 2026-06-27
 - Did: Project anchored via Singularity. BRAIN.md, SITETREE.md, PLANNER.md, DESIGN_GUIDE.md, README.md, AGENTS.md all committed.
 - Decided: libwebp WASM over Canvas API (Firefox WebP encoding failure). WASM loads from CDN not bundled (Cloudflare 1MB limit). Firefox folder fallback is ZIP upload.
