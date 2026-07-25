@@ -1,10 +1,9 @@
-import { ExternalLink, Globe } from 'lucide-react'
+import { } from 'lucide-react'
 
 export default function Footer() {
   return (
     <footer className="border-t border-border mt-24">
-      <div className="max-w-4xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* About the tool */}
+      <div className="max-w-4xl mx-auto px-6 py-16">
         <div className="flex flex-col gap-4">
           <img src="/logo.svg" alt="ImageSmith" className="h-7" />
           <p className="text-text-muted text-sm leading-relaxed">
@@ -15,50 +14,6 @@ export default function Footer() {
             whatever you started with. Nothing uploads. Nothing needs an
             account.
           </p>
-          <ul className="flex flex-col gap-1.5 text-sm text-text-muted">
-            <li>&#8212; libwebp WASM quality control</li>
-            <li>&#8212; Folder structure preserved in output ZIP</li>
-            <li>&#8212; Single file, batch, folder, or ZIP input</li>
-            <li>&#8212; Firefox supported via ZIP upload</li>
-          </ul>
-        </div>
-
-        {/* About the developer */}
-        <div className="flex flex-col gap-4">
-          <h3 className="font-display font-semibold text-text text-lg">
-            Built by Fahim
-          </h3>
-          <p className="text-text-muted text-sm leading-relaxed">
-            CSE student at BGC Trust University Bangladesh and frontend AI
-            engineering intern at Flyrank.ai. He builds tools he actually
-            needs, and releases them when they&apos;re ready.
-          </p>
-          <div className="flex items-center gap-4 mt-1">
-            <a
-              href="https://github.com/mahtamun-hoque-fahim"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors duration-150"
-            >
-              <ExternalLink className="w-4 h-4" />
-              GitHub
-            </a>
-            <a
-              href="https://instagram.com/mahtamun.recode"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors duration-150"
-            >
-              <Globe className="w-4 h-4" />
-              @mahtamun.recode
-            </a>
-          </div>
-          <a
-            href="#reviews"
-            className="self-start mt-1 text-sm text-accent hover:text-accent-hover transition-colors duration-150"
-          >
-            Leave a review
-          </a>
         </div>
       </div>
 
