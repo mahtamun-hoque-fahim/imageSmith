@@ -35,6 +35,9 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (overflow fix - final)
+- Did: Fixed persistent right-side gap. Issue was w-screen (100vw) is wider than viewport due to scrollbar width. Solution: added `overflow-x-hidden` to main container, reverted hero from w-screen to w-full, removed -mx-6 hack. Now hero properly constrains to viewport with no horizontal overflow.
+
 ### 2026-07-25 (Google Sans + scroll)
 - Did: Added Google Sans font from Google Fonts across entire website. Changed default body font in globals.css from Inter to Google Sans. Fixed CTA button: added onClick handler with smooth scroll to converter section (document.getElementById + scrollIntoView). Added id="converter-section" to converter.
 - Result: Consistent Google Sans typography across whole site. "Drop Your Files" button now scrolls to dropzone on click.
