@@ -1,7 +1,10 @@
+'use client'
+
 import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
+import { useEffect, useRef, useState } from 'react'
 
 const FEATURES = [
   {
@@ -22,10 +25,22 @@ const FEATURES = [
 ]
 
 export default function HomePage() {
+  const [parallaxOffset, setParallaxOffset] = useState(0)
+  const backgroundRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setParallaxOffset(window.scrollY * 0.5)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <main className="min-h-screen bg-bg">
-      {/* Nav */}
-      <nav className="px-6 py-6 flex items-center justify-between">
+      {/* Sticky Nav */}
+      <nav className="sticky top-0 z-50 px-6 py-6 flex items-center justify-between backdrop-blur-md bg-black/40 border-b border-white/10">
         <img src="/logo.svg" alt="ImageSmith" className="h-8" />
         <div className="flex items-center gap-8 text-text">
           <a href="#about" className="text-sm font-medium hover:text-accent transition-colors">
@@ -42,8 +57,12 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black">
-        {/* Background with waves */}
-        <div className="absolute inset-0 z-0">
+        {/* Background with parallax effect */}
+        <div 
+          ref={backgroundRef}
+          className="absolute inset-0 z-0"
+          style={{ transform: `translateY(${parallaxOffset}px)` }}
+        >
           <img
             src="/images/background.png"
             alt="Hero background"
@@ -101,8 +120,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Converter */}
-      <section className="max-w-4xl mx-auto px-6 pb-24">
+      {/* Converter - with breathing space */}
+      <section className="max-w-4xl mx-auto px-6 py-32">
         <ConverterWrapper />
       </section>
 
