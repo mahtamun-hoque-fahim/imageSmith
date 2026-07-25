@@ -95,7 +95,12 @@ export default function HomePage() {
           </div>
 
           {/* CTA Button */}
-          <button className="mt-6 px-12 py-5 bg-white text-black rounded-xl font-semibold text-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 flex items-center gap-3 shadow-2xl hover:shadow-[0_20px_60px_rgba(255,255,255,0.3)] border-0 outline-none cursor-pointer">
+          <button 
+            onClick={() => {
+              const converterSection = document.getElementById('converter-section')
+              converterSection?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="mt-6 px-12 py-5 bg-white text-black rounded-xl font-semibold text-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 flex items-center gap-3 shadow-2xl hover:shadow-[0_20px_60px_rgba(255,255,255,0.3)] border-0 outline-none cursor-pointer">
             <Download className="w-6 h-6" />
             Drop Your Files
           </button>
@@ -103,7 +108,7 @@ export default function HomePage() {
       </section>
 
       {/* Converter - with breathing space */}
-      <section className="max-w-4xl mx-auto px-6 py-32">
+      <section id="converter-section" className="max-w-4xl mx-auto px-6 py-32">
         <ConverterWrapper />
       </section>
 
