@@ -1,6 +1,6 @@
 'use client'
 
-import { Zap, Lock, FolderOpen, Download, Folder } from 'lucide-react'
+import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
@@ -73,7 +73,11 @@ export default function HomePage() {
 
         {/* Left decorative folder icon */}
         <div className="absolute left-8 md:left-16 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
-          <Folder className="w-48 h-48 md:w-64 md:h-64 text-purple-400 drop-shadow-[0_0_40px_rgba(192,132,250,0.6)] animate-pulse" />
+          <img 
+            src="/images/folder-icon.png" 
+            alt="Folder" 
+            className="w-48 h-48 md:w-64 md:h-64 drop-shadow-[0_0_40px_rgba(168,107,207,0.8)]"
+          />
         </div>
 
         {/* Right decorative ZIP icon */}
