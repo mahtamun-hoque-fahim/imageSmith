@@ -2,7 +2,7 @@
 
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
-import { ArrowLeft, Mail, Linkedin, Send } from 'lucide-react'
+import { ArrowLeft, Mail, ExternalLink, Send } from 'lucide-react'
 import { useState } from 'react'
 
 export default function ContactPage() {
@@ -132,7 +132,7 @@ export default function ContactPage() {
               className="flex items-center gap-3 text-sm text-text-muted hover:text-text transition-colors group"
             >
               <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-accent transition-colors">
-                <Linkedin className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4" />
               </div>
               mahtamun-hoque-fahim
             </a>
