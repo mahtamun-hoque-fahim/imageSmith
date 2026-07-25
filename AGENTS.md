@@ -35,6 +35,9 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (custom folder icon)
+- Did: Replaced lucide Folder component with custom 3D folder icon image. Added glow effect with drop-shadow. Much cleaner visual than outline icon.
+
 ### 2026-07-25 (overflow fix - final)
 - Did: Fixed persistent right-side gap. Issue was w-screen (100vw) is wider than viewport due to scrollbar width. Solution: added `overflow-x-hidden` to main container, reverted hero from w-screen to w-full, removed -mx-6 hack. Now hero properly constrains to viewport with no horizontal overflow.
 
