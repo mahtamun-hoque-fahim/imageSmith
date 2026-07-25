@@ -57,7 +57,7 @@ export default function HomePage() {
         <div
           ref={backgroundRef}
           className="absolute inset-0 z-0 w-full h-full"
-          style={{ transform: `translateY(${parallaxOffset}px)` }}
+          style={{ transform: `translateY(${parallaxOffset * 0.4}px)` }}
         >
           <img
             src="/images/background.png"
@@ -66,35 +66,35 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Left folder icon */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
+        {/* Left folder icon - large, partially off screen like reference */}
+        <div className="absolute -left-8 md:left-4 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
           <img
             src="/images/folder-icon.png"
             alt="Folder"
-            className="w-64 h-64 md:w-80 md:h-80 drop-shadow-[0_0_60px_rgba(168,107,207,0.9)]"
+            className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 drop-shadow-[0_0_80px_rgba(130,90,220,0.7)]"
           />
         </div>
 
-        {/* Right ZIP icon */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 z-[1] pointer-events-none">
+        {/* Right ZIP icon - large, partially off screen like reference */}
+        <div className="absolute -right-8 md:right-0 top-1/2 -translate-y-[55%] z-[1] pointer-events-none">
           <img
             src="/images/zip-icon.png"
             alt="ZIP file"
-            className="w-64 h-64 md:w-80 md:h-80 object-contain drop-shadow-2xl"
+            className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 object-contain drop-shadow-[0_0_60px_rgba(100,100,180,0.5)]"
           />
         </div>
 
         {/* Content */}
-        <div className="relative z-20 text-center flex flex-col items-center gap-8 px-6 max-w-3xl">
-          <p className="text-white/80 text-lg md:text-xl font-medium tracking-widest uppercase">Rapid Conversion</p>
-          <h1 className="font-display font-bold text-7xl md:text-9xl text-white leading-none tracking-tight">
+        <div className="relative z-20 text-center flex flex-col items-center gap-6 px-6 max-w-3xl">
+          <p className="text-white text-lg md:text-xl font-medium tracking-wide">Rapid Conversion</p>
+          <h1 className="font-display font-bold text-7xl md:text-8xl lg:text-9xl text-white leading-none tracking-tight">
             to .WEBP
           </h1>
           <button
             onClick={() => {
               document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="mt-4 px-14 py-5 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-3 shadow-2xl border-0 outline-none cursor-pointer"
+            className="mt-6 px-14 py-5 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-3 shadow-2xl border-0 outline-none cursor-pointer"
           >
             <Download className="w-5 h-5" />
             Drop Your Files
