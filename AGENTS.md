@@ -35,6 +35,10 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (Google Sans + scroll)
+- Did: Added Google Sans font from Google Fonts across entire website. Changed default body font in globals.css from Inter to Google Sans. Fixed CTA button: added onClick handler with smooth scroll to converter section (document.getElementById + scrollIntoView). Added id="converter-section" to converter.
+- Result: Consistent Google Sans typography across whole site. "Drop Your Files" button now scrolls to dropzone on click.
+
 ### 2026-07-25 (background coverage)
 - Did: Fixed black gap on right side. Changed hero section from `w-full` to `w-screen` to span entire viewport width. Added explicit `w-full h-full` to background container. Background image now fills entire viewport, no more dark edges.
 
