@@ -1,22 +1,23 @@
+import Link from 'next/link'
+
 export default function Footer() {
   return (
     <footer
       className="relative border-t border-border mt-24"
       style={{ backgroundImage: 'url(/images/footer-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
-
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         <div className="flex flex-col gap-4 max-w-sm">
-          <img src="/logo.svg" alt="ImageSmith" className="h-7" />
+          <Link href="/"><img src="/logo.svg" alt="ImageSmith" className="h-7" /></Link>
           <p className="text-text-muted text-sm leading-relaxed">
             A free WebP converter that runs entirely in your browser. Nothing uploads. Nothing needs an account.
           </p>
         </div>
 
         <nav className="flex flex-col gap-3">
-          <a href="#about" className="text-sm text-text-muted hover:text-text transition-colors">About</a>
-          <a href="#contact" className="text-sm text-text-muted hover:text-text transition-colors">Contact</a>
-          <a href="#privacy" className="text-sm text-text-muted hover:text-text transition-colors">Privacy Policy</a>
+          <Link href="/about" className="text-sm text-text-muted hover:text-text transition-colors">About</Link>
+          <Link href="/contact" className="text-sm text-text-muted hover:text-text transition-colors">Contact</Link>
+          <Link href="/privacy" className="text-sm text-text-muted hover:text-text transition-colors">Privacy Policy</Link>
         </nav>
       </div>
 

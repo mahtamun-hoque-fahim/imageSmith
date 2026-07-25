@@ -4,6 +4,7 @@ import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const FEATURES = [
@@ -40,9 +41,9 @@ export default function HomePage() {
       <nav className="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between backdrop-blur-md bg-black/30 border-b border-white/5">
         <img src="/logo.svg" alt="ImageSmith" className="h-8" />
         <div className="flex items-center gap-8 text-white">
-          <a href="#about" className="text-sm font-medium hover:opacity-70 transition-opacity">About</a>
-          <a href="#contact" className="text-sm font-medium hover:opacity-70 transition-opacity">Contact</a>
-          <a href="#privacy" className="text-sm font-medium hover:opacity-70 transition-opacity">Privacy Policy</a>
+          <Link href="/about" className="text-sm font-medium hover:opacity-70 transition-opacity">About</Link>
+          <Link href="/contact" className="text-sm font-medium hover:opacity-70 transition-opacity">Contact</Link>
+          <Link href="/privacy" className="text-sm font-medium hover:opacity-70 transition-opacity">Privacy Policy</Link>
         </div>
       </nav>
 
