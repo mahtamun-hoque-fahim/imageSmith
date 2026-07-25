@@ -35,6 +35,11 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (continued)
+- Did: Hero polish after live review. Replaced weak outline folder SVG with solid 3D gradient folder (purple/indigo gradient with shadow depth). Repositioned ZIP icon to bottom-right to prevent cutoff. Fixed button styling: solid white bg with border-0, larger shadow, better active states.
+- Improved: Full min-h-screen (was min-h-[70vh]). Better spacing (gap-12). Text sizing scaled up (Rapid Conversion md:text-2xl, headline md:text-8xl). Added gradient overlay to background for text contrast.
+- Result: Hero now matches design reference — solid icons, no cutoff, button is crisp white, full-screen proportions.
+
 ### 2026-07-25
 - Session Start: `git config user.name "mahtamun-hoque-fahim"` & `git config user.email "mahtamunhoquefahim@gmail.com"`
 - Did: Complete hero UI redesign. Rebuilt nav (added About/Contact/Privacy links), removed hero image + description paragraph, replaced with dark background with blue wave pattern. Added decorative folder icon (left) + zip icon (right). New headline: "Rapid Conversion to .WEBP". White CTA button "Drop Your Files" with Download icon.
