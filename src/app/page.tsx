@@ -47,14 +47,14 @@ export default function HomePage() {
         <img
           src="/images/folder-icon.png"
           alt="Folder"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-72 h-72 pointer-events-none z-10"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10"
         />
 
         {/* Right ZIP icon */}
         <img
           src="/images/zip-icon.png"
           alt="ZIP"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-72 h-72 pointer-events-none z-10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10"
         />
 
         {/* Text content */}
