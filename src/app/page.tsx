@@ -41,7 +41,7 @@ export default function HomePage() {
       {/* Hero */}
       <section
         className="relative w-full h-screen flex items-center justify-center overflow-hidden"
-        style={{ backgroundImage: 'url(/images/background.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+        style={{ backgroundImage: 'url(/images/bg-waves.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         {/* Left folder icon */}
         <img
