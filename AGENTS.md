@@ -35,6 +35,10 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (gap fix)
+- Did: Fixed huge gap on right side. ZIP icon was positioned with `-right-16` (offscreen on mobile). Changed to `right-0 bottom-0` anchored to corner. Increased sizing from w-64/h-64 → w-80/h-80 (mobile) and w-96/h-96 → w-[32rem]/h-[32rem] (desktop). Changed from `object-contain` to `object-cover` so ZIP fills container.
+- Result: ZIP icon now fills right side properly, balances folder on left, no more black gap.
+
 ### 2026-07-25 (final polish)
 - Session Start: `git config user.name "mahtamun-hoque-fahim"` & `git config user.email "mahtamunhoquefahim@gmail.com"`
 - Did: Final hero polish pass. Added parallax scroll effect to background image (translateY at 0.5x scroll speed). Made nav sticky (position: sticky, top-0, z-50) with backdrop-blur-md + bg-black/40 + subtle border-b. Increased breathing space between hero and converter (py-32).
