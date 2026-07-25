@@ -35,6 +35,9 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
+### 2026-07-25 (background coverage)
+- Did: Fixed black gap on right side. Changed hero section from `w-full` to `w-screen` to span entire viewport width. Added explicit `w-full h-full` to background container. Background image now fills entire viewport, no more dark edges.
+
 ### 2026-07-25 (folder icon)
 - Did: Replaced custom 3D SVG folder with generic lucide-react Folder icon. Added purple glow using `drop-shadow-[0_0_40px_rgba(192,132,250,0.6)]` and subtle pulse animation. Cleaner, simpler, more maintainable.
 
