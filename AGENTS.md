@@ -41,6 +41,17 @@ Free, client-side image-to-WebP converter with folder-structure-preserving ZIP o
 ### 2026-07-25 (overflow fix - final)
 - Did: Fixed persistent right-side gap. Issue was w-screen (100vw) is wider than viewport due to scrollbar width. Solution: added `overflow-x-hidden` to main container, reverted hero from w-screen to w-full, removed -mx-6 hack. Now hero properly constrains to viewport with no horizontal overflow.
 
+## Session Log
+
+(Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
+
+### 2026-07-25 (dashboard + auth complete)
+- Session Start: `git config user.name "mahtamun-hoque-fahim"` & `git config user.email "mahtamunhoquefahim@gmail.com"`
+- Did: Full admin auth flow. Better Auth installed (email+password). Schema: user, session, account, verification tables. proxy.ts protects /admin, redirects to /login. Login page built. Admin dashboard rebuilt with session check, Messages + Reviews tabs, mark-as-read, sign out. DB tables created via Neon SQL editor. Admin account seeded via browser console fetch. Dashboard confirmed working.
+- Pages live: /login, /admin, /about, /contact, /privacy
+- Env vars needed: BETTER_AUTH_SECRET, BETTER_AUTH_URL, NEXT_PUBLIC_APP_URL
+- Stack: Better Auth + Drizzle + Neon, Next.js 16, Edge Runtime
+
 ### 2026-07-25 (Google Sans + scroll)
 - Did: Added Google Sans font from Google Fonts across entire website. Changed default body font in globals.css from Inter to Google Sans. Fixed CTA button: added onClick handler with smooth scroll to converter section (document.getElementById + scrollIntoView). Added id="converter-section" to converter.
 - Result: Consistent Google Sans typography across whole site. "Drop Your Files" button now scrolls to dropzone on click.
