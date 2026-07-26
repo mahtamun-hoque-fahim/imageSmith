@@ -51,9 +51,7 @@ export default function AdminPage() {
   }, [])
 
   async function fetchStats() {
-    const res = await fetch('/api/stats', {
-      headers: { 'x-admin-secret': process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '' },
-    })
+    const res = await fetch('/api/stats')
     if (res.ok) setStatsData(await res.json())
   }
 

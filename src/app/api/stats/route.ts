@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDb } from '@/lib/db'
 import { stats } from '@/lib/db/schema'
 import { eq, sql } from 'drizzle-orm'
+import { auth } from '@/lib/auth'
 
 export const runtime = 'edge'
 
@@ -21,10 +22,10 @@ async function ensureStats(db: ReturnType<typeof getDb>) {
   }).onConflictDoNothing()
 }
 
-// GET — fetch stats (admin only)
+// GET — fetch stats (session protected)
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('x-admin-secret')
-  if (secret !== (process.env.ADMIN_SECRET ?? 'changeme')) {
+  const session = await auth.api.getSession({ headers: req.headers })
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -34,9 +35,8 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(row)
 }
 
-// POST — increment a counter
+// POST — increment a counter (public, but skips admin IPs)
 export async function POST(req: NextRequest) {
-  // Skip admin IPs
   if (isAdminIp(req)) {
     return NextResponse.json({ skipped: true })
   }
