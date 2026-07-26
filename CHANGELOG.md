@@ -1,24 +1,36 @@
 # Changelog
 
-## [v0.1.0] — 2026-06-29
+## [v0.2.0] — 2026-07-25
 
 ### Added
-- Full converter UI: single file, batch, folder (webkitdirectory), ZIP input with Firefox fallback (2db860d)
-- libwebp WASM engine via script-tag injection — bypasses Turbopack CJS bundling, works on all browsers including Firefox (2db860d)
-- JSZip structure-preserving output — identical folder tree and filenames, .webp extension only (2db860d)
-- Chunked batch processing (10/batch) with per-file progress feedback (2db860d)
-- Quality slider (1–100) (2db860d)
-- /api/reviews — GET + POST, Upstash Redis rate limit 1/hr per IP, HTML sanitised, 500-char cap (2db860d)
-- SEO: meta titles/descriptions, sitemap.xml, robots.txt, JSON-LD (SoftwareApplication + WebSite), canonical tags (df1481b)
-- Microinteractions and entrance animations across all interactive zones (e535ab3)
-- Image slot placeholder system with paste-ready IMAGE-BRIEF tags (c01a6d4, a8af2df, 74d9968)
-- Skeleton-shimmer on new image slots (3ad2dcb)
-- Humanizer pass: de-AI all user-facing prose (8b3074b)
+- Hero section redesign: dark background with blue arc graphic, parallax scroll, floating folder + ZIP icons
+- Sticky frosted-glass navbar with About / Contact / Privacy Policy links
+- `/about` page: tool description + creator bio + link to contact
+- `/contact` page: form with name/email/message, email + LinkedIn links
+- `/privacy` page: 8-section privacy policy
+- `/login` page: Better Auth email + password login
+- `/admin` dashboard: Messages + Reviews tabs, mark-as-read, sign out, stats cards
+- Page view + conversion tracking in DB
+- Vercel Analytics integration
+- Footer redesign: dark background image, nav links, copyright bar
+- Contacts DB table + API routes (POST /api/contact, GET|PATCH /api/admin/contacts)
+- Stats DB table + /api/stats (GET session-protected, POST public)
+- Better Auth: user/session/account/verification tables via Drizzle adapter
+- Google Sans font across entire site
 
 ### Fixed
-- 2 MEDIUM sentinel security findings (f93b152)
-- 2 valley-of-death spec-vs-code audit FAILs (757abcc)
+- CSS syntax error in globals.css (orphaned keyframe body)
+- ZIP icon distortion from fixed h-72 (removed, width-only sizing now)
+- Horizontal overflow gap on right side of hero
+- Build error: Linkedin not in lucide-react, replaced with ExternalLink
+- Stats GET refactored to use Better Auth session (no NEXT_PUBLIC secret on client)
 
 ### Changed
-- Waterborne: replaced check/cross glyphs with plain text in BRAIN.md (37b8322)
-- Repo docs initialised: BRAIN.md, PLANNER.md, DESIGN_GUIDE.md, README.md, AGENTS.md, SITETREE.md (57d8b65)
+- CTA button: sharp corners, scrolls to converter on click
+- Hero background: clean dark graphic, no baked-in text
+- Footer background: dark arc graphic matching site tone
+- Nav links from anchor hashes to proper Next.js Link routing
+
+## [v0.1.0] — 2026-06-27
+
+- Initial release: WASM WebP converter, folder structure preserved in ZIP, Firefox ZIP upload fallback, star rating reviews system
