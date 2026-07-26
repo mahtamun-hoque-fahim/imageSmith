@@ -116,6 +116,12 @@ export default function ConverterZone() {
         }
 
         setConvertState('done')
+        // Track conversion (fire and forget)
+        fetch('/api/stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'conversion' }),
+        }).catch(() => {})
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Conversion failed')
         setConvertState('error')

@@ -24,11 +24,17 @@ type Review = {
 
 type Tab = 'messages' | 'reviews'
 
+type Stats = {
+  pageViews: number
+  conversions: number
+}
+
 export default function AdminPage() {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('messages')
   const [contacts, setContacts] = useState<Contact[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
+  const [statsData, setStatsData] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -38,11 +44,18 @@ export default function AdminPage() {
         router.push('/login')
         return
       }
-      await Promise.all([fetchContacts(), fetchReviews()])
+      await Promise.all([fetchContacts(), fetchReviews(), fetchStats()])
       setLoading(false)
     }
     init()
   }, [])
+
+  async function fetchStats() {
+    const res = await fetch('/api/stats', {
+      headers: { 'x-admin-secret': process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '' },
+    })
+    if (res.ok) setStatsData(await res.json())
+  }
 
   async function fetchContacts() {
     const res = await fetch('/api/admin/contacts', {
@@ -97,7 +110,7 @@ export default function AdminPage() {
         </div>
         <div className="flex items-center gap-4">
           <button
-            onClick={() => { fetchContacts(); fetchReviews() }}
+            onClick={() => { fetchContacts(); fetchReviews(); fetchStats() }}
             className="flex items-center gap-2 text-sm text-text-muted hover:text-text transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
@@ -112,6 +125,29 @@ export default function AdminPage() {
           </button>
         </div>
       </div>
+
+      {/* Stats cards */}
+      {statsData && (
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <div className="border border-border p-6 flex flex-col gap-1">
+            <p className="text-xs text-text-muted uppercase tracking-widest">Page Views</p>
+            <p className="text-4xl font-bold text-text">{statsData.pageViews.toLocaleString()}</p>
+            <p className="text-xs text-text-muted">Total visits to homepage</p>
+          </div>
+          <div className="border border-border p-6 flex flex-col gap-1">
+            <p className="text-xs text-text-muted uppercase tracking-widest">Conversions</p>
+            <p className="text-4xl font-bold text-text">{statsData.conversions.toLocaleString()}</p>
+            <p className="text-xs text-text-muted">
+              Files converted
+              {statsData.pageViews > 0 && (
+                <span className="ml-2 text-accent">
+                  ({Math.round((statsData.conversions / statsData.pageViews) * 100)}% conversion rate)
+                </span>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex items-center gap-0 border-b border-border mb-8">

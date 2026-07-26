@@ -34,6 +34,15 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    // Track page view (fire and forget)
+    fetch('/api/stats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'view' }),
+    }).catch(() => {})
+  }, [])
+
   return (
     <main className="min-h-screen bg-bg overflow-x-hidden">
 

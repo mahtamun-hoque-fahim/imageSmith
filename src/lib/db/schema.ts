@@ -63,6 +63,13 @@ export const verification = pgTable('verification', {
   updatedAt: timestamp('updated_at'),
 })
 
+export const stats = pgTable('stats', {
+  id: text('id').primaryKey(),
+  pageViews: integer('page_views').notNull().default(0),
+  conversions: integer('conversions').notNull().default(0),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
 export type Review = typeof reviews.$inferSelect
 export type NewReview = typeof reviews.$inferInsert
 export type Contact = typeof contacts.$inferSelect

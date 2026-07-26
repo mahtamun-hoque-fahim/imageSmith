@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://imagesmith.dev'
 
@@ -97,6 +98,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-bg text-text antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   )
