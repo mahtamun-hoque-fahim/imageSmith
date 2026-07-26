@@ -6,6 +6,8 @@ export default function Footer() {
       className="relative border-t border-border mt-24"
       style={{ backgroundImage: 'url(/images/footer-bg.png)', backgroundSize: 'cover', backgroundPosition: 'bottom left' }}
     >
+      {/* Dark overlay to match site tone */}
+      <div className="absolute inset-0 bg-black/70 z-0" />
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         <div className="flex flex-col gap-4 max-w-sm">
           <Link href="/"><img src="/logo.svg" alt="ImageSmith" className="h-7" /></Link>
