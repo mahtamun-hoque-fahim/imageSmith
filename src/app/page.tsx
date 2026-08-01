@@ -6,6 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
 import { useEffect, useState } from 'react'
+import { useReveal } from '@/hooks/useReveal'
 
 const FEATURES = [
   {
@@ -28,6 +29,13 @@ const FEATURES = [
 export default function HomePage() {
   const [offset, setOffset] = useState(0)
 
+  // scroll reveals
+  const refConverter  = useReveal<HTMLElement>()
+  const refFeatImg    = useReveal<HTMLDivElement>()
+  const refFeatCards  = useReveal<HTMLDivElement>()
+  const refReviews    = useReveal<HTMLElement>()
+  const refFooter     = useReveal<HTMLElement>()
+
   useEffect(() => {
     const onScroll = () => setOffset(window.scrollY * 0.4)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -43,7 +51,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-bg overflow-x-hidden">
+    <main className="min-h-screen bg-bg overflow-x-hidden page-transition">
 
       <Navbar />
 
@@ -85,13 +93,13 @@ export default function HomePage() {
           className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float-delayed"
         />
 
-        {/* Text content */}
+        {/* Text content — staggered hero entrance */}
         <div className="relative z-20 text-center flex flex-col items-center gap-4 sm:gap-6 px-6">
-          <p className="text-white text-base sm:text-xl font-medium">Rapid Conversion</p>
-          <h1 className="font-display font-bold text-5xl sm:text-8xl text-white leading-none">to .WEBP</h1>
+          <p className="hero-reveal text-white text-base sm:text-xl font-medium">Rapid Conversion</p>
+          <h1 className="hero-reveal-delay font-display font-bold text-5xl sm:text-8xl text-white leading-none">to .WEBP</h1>
           <button
             onClick={() => document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg"
+            className="hero-reveal-late mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg"
           >
             <Download className="w-5 h-5" />
             Drop Your Files
@@ -100,7 +108,7 @@ export default function HomePage() {
       </section>
 
       {/* Converter */}
-      <section id="converter-section" className="max-w-4xl mx-auto px-6 py-32">
+      <section ref={refConverter} id="converter-section" className="reveal max-w-4xl mx-auto px-6 py-32">
         <ConverterWrapper />
       </section>
 
@@ -110,7 +118,7 @@ export default function HomePage() {
 
           {/* IMAGE-BRIEF: feat-01 | 3:1 | WIRED → /public/images/feat-flow.png — swap with 2400×800 final render when ready */}
           {/* PROMPT: clean flat isometric vector illustration, horizontal flow diagram, left side shows a varied stack of image file format icons (JPG PNG GIF BMP) with subtle size variation, center has a minimal conversion funnel or arrow, right side shows a single ZIP archive file with an expanded nested folder tree floating beside it preserving the exact directory hierarchy, indigo-violet accent color on the ZIP output and folder nodes, desaturated muted blue-gray fine lines for folder path connectors, deep dark navy background, zero text labels, zero numbers, zero UI chrome, technical but approachable aesthetic, generous negative space top and bottom, precise vector-clean edges, high contrast, professional --ar 3:1 --style raw */}
-          <div className="animate-fade-in w-full rounded-xl overflow-hidden">
+          <div ref={refFeatImg} className="reveal animate-fade-in w-full rounded-xl overflow-hidden">
             <img
               src="/images/feat-flow.png"
               alt="Image files converting to WebP with folder structure preserved"
@@ -119,9 +127,13 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {FEATURES.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex flex-col gap-3">
+          <div ref={refFeatCards} className="reveal grid grid-cols-1 md:grid-cols-3 gap-8">
+          {FEATURES.map(({ icon: Icon, title, desc }, i) => (
+            <div
+              key={title}
+              className="flex flex-col gap-3"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
               <div className="w-9 h-9 rounded-lg bg-accent-faint flex items-center justify-center">
                 <Icon className="w-5 h-5 text-accent" />
               </div>
@@ -134,13 +146,15 @@ export default function HomePage() {
       </section>
 
       {/* Reviews */}
-      <section className="border-t border-border">
+      <section ref={refReviews} className="reveal border-t border-border">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <ReviewList />
         </div>
       </section>
 
-      <Footer />
+      <footer ref={refFooter} className="reveal">
+        <Footer />
+      </footer>
     </main>
   )
 }
