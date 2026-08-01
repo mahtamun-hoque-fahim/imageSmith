@@ -126,3 +126,56 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Scroll reveal ──────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.55s var(--ease-out),
+    transform 0.55s var(--ease-out);
+}
+
+.reveal[data-revealed='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger helpers — add delay-N class alongside .reveal */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* hero entrance — fires on mount, no scroll needed */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-enter 0.7s var(--ease-out) forwards;
+}
+.hero-reveal-delay {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-enter 0.7s var(--ease-out) 0.15s forwards;
+}
+.hero-reveal-late {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-enter 0.7s var(--ease-out) 0.3s forwards;
+}
+
+@keyframes hero-enter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page transition ────────────────────────────────────────────────────── */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-transition {
+  animation: page-enter 0.28s var(--ease-out) both;
+}
+
