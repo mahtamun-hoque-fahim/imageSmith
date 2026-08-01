@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/layout/Footer'
+import Navbar from '@/components/layout/Navbar'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
@@ -14,15 +15,7 @@ export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-bg">
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between backdrop-blur-md bg-black/30 border-b border-white/5">
-        <Link href="/"><img src="/logo.svg" alt="ImageSmith" className="h-8" /></Link>
-        <div className="flex items-center gap-8 text-white">
-          <Link href="/about" className="text-sm font-medium hover:opacity-70 transition-opacity">About</Link>
-          <Link href="/contact" className="text-sm font-medium hover:opacity-70 transition-opacity">Contact</Link>
-          <Link href="/privacy" className="text-sm font-medium opacity-100">Privacy Policy</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="max-w-3xl mx-auto px-6 pt-40 pb-24">
 
