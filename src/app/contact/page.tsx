@@ -61,7 +61,7 @@ export default function ContactPage() {
                 value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 placeholder="Your name"
-                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors"
+                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
 
@@ -72,7 +72,7 @@ export default function ContactPage() {
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors"
+                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
 
@@ -83,7 +83,7 @@ export default function ContactPage() {
                 onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                 placeholder="What's on your mind?"
                 rows={6}
-                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors resize-none"
+                className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors resize-none rounded-lg"
               />
             </div>
 
@@ -97,7 +97,7 @@ export default function ContactPage() {
             <button
               onClick={handleSubmit}
               disabled={status === 'loading'}
-              className="self-start flex items-center gap-2 px-8 py-3 bg-white text-black text-sm font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="self-start flex items-center gap-2 px-8 py-3 bg-white text-black text-sm font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
             >
               <Send className="w-4 h-4" />
               {status === 'loading' ? 'Sending...' : 'Send Message'}
@@ -112,7 +112,7 @@ export default function ContactPage() {
               href="mailto:mahtamunhoquefahim@gmail.com"
               className="flex items-center gap-3 text-sm text-text-muted hover:text-text transition-colors group"
             >
-              <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-accent transition-colors">
+              <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-accent transition-colors rounded-lg">
                 <Mail className="w-4 h-4" />
               </div>
               mahtamunhoquefahim@gmail.com
@@ -124,7 +124,7 @@ export default function ContactPage() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 text-sm text-text-muted hover:text-text transition-colors group"
             >
-              <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-accent transition-colors">
+              <div className="w-9 h-9 border border-border flex items-center justify-center group-hover:border-accent transition-colors rounded-lg">
                 <ExternalLink className="w-4 h-4" />
               </div>
               mahtamun-hoque-fahim
