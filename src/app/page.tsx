@@ -2,16 +2,16 @@
 
 import { Zap, Lock, FolderOpen, Download } from 'lucide-react'
 import Footer from '@/components/layout/Footer'
+import Navbar from '@/components/layout/Navbar'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const FEATURES = [
   {
     icon: Lock,
     title: 'No Server. No Upload.',
-    desc: 'All conversion happens in your browser using cutting-edge web technologies. Nothing touches a server. We don\'t know where is your camera is.',
+    desc: "All conversion happens in your browser using cutting-edge web technologies. Nothing touches a server. We don't know where is your camera is.",
   },
   {
     icon: FolderOpen,
@@ -21,7 +21,7 @@ const FEATURES = [
   {
     icon: Zap,
     title: 'No paywall. No limits.',
-    desc: 'Even if you convert 1000 images, it\'s still free. No account. Just drag, drop, download andrun.',
+    desc: "Even if you convert 1000 images, it's still free. No account. Just drag, drop, download andrun.",
   },
 ]
 
@@ -35,7 +35,6 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
-    // Track page view (fire and forget)
     fetch('/api/stats', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -46,23 +45,15 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-bg overflow-x-hidden">
 
-      {/* Fixed Nav - floats over the hero */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between backdrop-blur-md bg-black/30 border-b border-white/5">
-        <img src="/logo.svg" alt="ImageSmith" className="h-8" />
-        <div className="flex items-center gap-8 text-white">
-          <Link href="/about" className="text-sm font-medium hover:opacity-70 transition-opacity">About</Link>
-          <Link href="/contact" className="text-sm font-medium hover:opacity-70 transition-opacity">Contact</Link>
-          <Link href="/privacy" className="text-sm font-medium hover:opacity-70 transition-opacity">Privacy Policy</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section
-        className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+        className="relative w-full h-[80vh] sm:h-screen flex items-center justify-center overflow-hidden"
       >
-        {/* Background with parallax */}
+        {/* Background — mobile uses sm_bg, desktop uses hero-bg-v2 */}
         <div
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 hidden sm:block"
           style={{
             backgroundImage: 'url(/images/hero-bg-v2.png)',
             backgroundSize: 'cover',
@@ -71,28 +62,36 @@ export default function HomePage() {
             willChange: 'transform',
           }}
         />
+        <div
+          className="absolute inset-0 z-0 sm:hidden"
+          style={{
+            backgroundImage: 'url(/images/sm_bg.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
+          }}
+        />
 
-        {/* Left folder icon — floating */}
+        {/* Left folder icon — hidden on mobile */}
         <img
           src="/images/folder-icon.png"
           alt="Folder"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float"
+          className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float"
         />
 
-        {/* Right ZIP icon — floating offset */}
+        {/* Right ZIP icon — hidden on mobile */}
         <img
           src="/images/zip-icon.png"
           alt="ZIP"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float-delayed"
+          className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 w-56 md:w-72 lg:w-80 pointer-events-none z-10 animate-float-delayed"
         />
 
         {/* Text content */}
-        <div className="relative z-20 text-center flex flex-col items-center gap-6">
-          <p className="text-white text-xl font-medium">Rapid Conversion</p>
-          <h1 className="font-display font-bold text-8xl text-white leading-none">to .WEBP</h1>
+        <div className="relative z-20 text-center flex flex-col items-center gap-4 sm:gap-6 px-6">
+          <p className="text-white text-base sm:text-xl font-medium">Rapid Conversion</p>
+          <h1 className="font-display font-bold text-5xl sm:text-8xl text-white leading-none">to .WEBP</h1>
           <button
             onClick={() => document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="mt-4 px-14 py-5 bg-white text-black font-bold text-lg flex items-center gap-3 cursor-pointer border-0"
+            className="mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0"
           >
             <Download className="w-5 h-5" />
             Drop Your Files
@@ -100,7 +99,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Converter - with breathing space */}
+      {/* Converter */}
       <section id="converter-section" className="max-w-4xl mx-auto px-6 py-32">
         <ConverterWrapper />
       </section>
