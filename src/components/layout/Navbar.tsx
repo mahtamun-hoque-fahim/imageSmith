@@ -14,34 +14,48 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // small tick so CSS transition actually fires on first open
+  // two-frame trick: mount first, then set mounted to trigger CSS transition
   useEffect(() => {
-    if (open) requestAnimationFrame(() => setMounted(true))
-    else setMounted(false)
+    if (open) {
+      const raf = requestAnimationFrame(() =>
+        requestAnimationFrame(() => setMounted(true))
+      )
+      return () => cancelAnimationFrame(raf)
+    } else {
+      setMounted(false)
+    }
   }, [open])
 
-  // lock body scroll when modal is open
+  // lock body scroll
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [open])
 
+  // on desktop: close if accidentally open
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)')
+    const handler = (e: MediaQueryListEvent) => { if (e.matches) setOpen(false) }
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
   return (
     <>
-      {/* ── Fixed bar ─────────────────────────────────────────────────── */}
+      {/* ── Fixed bar ─────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/5">
         <div className="flex items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
 
-          {/* Mobile: hamburger left */}
+          {/* Hamburger — only visible on mobile via CSS, not sm:hidden */}
           <button
-            className="sm:hidden flex items-center justify-center w-8 h-8 text-white"
+            className="flex sm:hidden items-center justify-center w-8 h-8 text-white"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          {/* Logo — centered on mobile, left on desktop */}
+          {/* Logo */}
           <div className="absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0">
             <img src="/logo.svg" alt="ImageSmith" className="h-7 sm:h-8" />
           </div>
@@ -49,48 +63,53 @@ export default function Navbar() {
           {/* Desktop links */}
           <div className="hidden sm:flex items-center gap-8 text-white">
             {LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="text-sm font-medium hover:opacity-70 transition-opacity"
-              >
+              <Link key={href} href={href} className="text-sm font-medium hover:opacity-70 transition-opacity">
                 {label}
               </Link>
             ))}
           </div>
 
-          {/* Mobile: right spacer */}
-          <div className="w-8 sm:hidden" aria-hidden="true" />
+          {/* Spacer */}
+          <div className="flex sm:hidden w-8" aria-hidden="true" />
         </div>
       </nav>
 
-      {/* ── Mobile modal — only rendered when open ────────────────────── */}
+      {/* ── Mobile modal — no Tailwind breakpoint classes inside ──── */}
       {open && (
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 z-[60] sm:hidden bg-black/60 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
             style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9998,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
               opacity: mounted ? 1 : 0,
               transition: 'opacity 0.25s ease',
             }}
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
           />
 
-          {/* Modal card */}
+          {/* Card */}
           <div
-            className="fixed z-[70] sm:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
             style={{
+              position: 'fixed',
               top: '50%',
               left: '50%',
+              zIndex: 9999,
               width: '78vw',
               maxWidth: '320px',
               transform: mounted
                 ? 'translate(-50%, -50%)'
                 : 'translate(calc(-50% - 80px), -50%)',
               opacity: mounted ? 1 : 0,
-              transition: 'transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease',
+              transition: 'transform 0.32s cubic-bezier(0.23,1,0.32,1), opacity 0.25s ease',
               backgroundColor: '#1a1d28',
               border: '1px solid rgba(255,255,255,0.12)',
               borderRadius: '16px',
@@ -99,24 +118,21 @@ export default function Navbar() {
               flexDirection: 'column',
               gap: '28px',
             }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation menu"
           >
-            {/* Top row — logo + close */}
+            {/* Logo + close */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <img src="/logo.svg" alt="ImageSmith" style={{ height: '24px' }} />
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close menu"
-                style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 0 }}
+                style={{ color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 0, padding: 0 }}
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* Links */}
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <nav style={{ display: 'flex', flexDirection: 'column' }}>
               {LINKS.map(({ href, label }, i) => (
                 <Link
                   key={href}
@@ -135,7 +151,7 @@ export default function Navbar() {
                   }}
                 >
                   {label}
-                  <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.35)' }} />
+                  <ChevronRight size={16} color="rgba(255,255,255,0.35)" />
                 </Link>
               ))}
             </nav>
