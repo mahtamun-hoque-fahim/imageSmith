@@ -66,14 +66,15 @@ export default function AboutPage() {
         </section>
 
         {/* CTA to contact */}
-        <div className="flex items-center gap-4 p-6 border border-border rounded-lg">
+        {/* Mobile: stacked, centered, full-width button. Desktop: horizontal card unchanged. */}
+        <div className="p-6 border border-border rounded-lg flex flex-col items-center text-center gap-5 sm:flex-row sm:items-center sm:text-left sm:gap-4">
           <div className="flex-1">
-            <p className="text-text font-medium mb-1">Want to get in touch?</p>
+            <p className="text-text font-bold text-xl sm:text-base sm:font-medium mb-1">Want to get in touch ?</p>
             <p className="text-text-muted text-sm">Reach out on the contact page — for bugs, ideas, or just to say hi.</p>
           </div>
           <Link
             href="/contact"
-            className="flex items-center gap-2 px-5 py-3 bg-white text-black text-sm font-semibold hover:bg-gray-100 transition-colors shrink-0"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-white text-accent text-sm font-semibold hover:bg-gray-100 transition-colors sm:bg-white sm:text-black shrink-0 rounded-sm"
           >
             Contact
             <ArrowRight className="w-4 h-4" />
