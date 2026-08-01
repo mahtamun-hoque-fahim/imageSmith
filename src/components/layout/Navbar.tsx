@@ -12,6 +12,13 @@ const LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // small tick so CSS transition actually fires on first open
+  useEffect(() => {
+    if (open) requestAnimationFrame(() => setMounted(true))
+    else setMounted(false)
+  }, [open])
 
   // lock body scroll when modal is open
   useEffect(() => {
@@ -52,68 +59,89 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile: right spacer to balance hamburger */}
+          {/* Mobile: right spacer */}
           <div className="w-8 sm:hidden" aria-hidden="true" />
         </div>
       </nav>
 
-      {/* ── Mobile modal overlay ───────────────────────────────────────── */}
-      {/* Backdrop — blurred, fades in */}
-      <div
-        className={[
-          'fixed inset-0 z-[60] sm:hidden',
-          'bg-black/50 backdrop-blur-sm',
-          'transition-opacity duration-300',
-          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
-        ].join(' ')}
-        onClick={() => setOpen(false)}
-        aria-hidden="true"
-      />
-
-      {/* Modal card — slides in from left */}
-      <div
-        className={[
-          'fixed top-1/2 left-1/2 z-[70] sm:hidden',
-          '-translate-y-1/2',
-          'w-[78vw] max-w-xs',
-          'bg-surface border border-white/10 rounded-2xl',
-          'px-6 py-7 flex flex-col gap-8',
-          'transition-all duration-300 ease-out',
-          open
-            ? '-translate-x-1/2 opacity-100'
-            : '-translate-x-[calc(50%+60vw)] opacity-0',
-        ].join(' ')}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-      >
-        {/* Top row — logo + close */}
-        <div className="flex items-center justify-between">
-          <img src="/logo.svg" alt="ImageSmith" className="h-6" />
-          <button
+      {/* ── Mobile modal — only rendered when open ────────────────────── */}
+      {open && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-[60] sm:hidden bg-black/60 backdrop-blur-sm"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.25s ease',
+            }}
             onClick={() => setOpen(false)}
-            aria-label="Close menu"
-            className="text-white/70 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+            aria-hidden="true"
+          />
 
-        {/* Links */}
-        <nav className="flex flex-col gap-1">
-          {LINKS.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between py-3 text-sm font-medium text-white/80 hover:text-white border-b border-white/5 last:border-0 transition-colors"
-            >
-              {label}
-              <ChevronRight className="w-4 h-4 text-white/40" />
-            </Link>
-          ))}
-        </nav>
-      </div>
+          {/* Modal card */}
+          <div
+            className="fixed z-[70] sm:hidden"
+            style={{
+              top: '50%',
+              left: '50%',
+              width: '78vw',
+              maxWidth: '320px',
+              transform: mounted
+                ? 'translate(-50%, -50%)'
+                : 'translate(calc(-50% - 80px), -50%)',
+              opacity: mounted ? 1 : 0,
+              transition: 'transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease',
+              backgroundColor: '#1a1d28',
+              border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: '16px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '28px',
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+          >
+            {/* Top row — logo + close */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <img src="/logo.svg" alt="ImageSmith" style={{ height: '24px' }} />
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 0 }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Links */}
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+              {LINKS.map(({ href, label }, i) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '14px 0',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    color: 'rgba(255,255,255,0.85)',
+                    borderBottom: i < LINKS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {label}
+                  <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.35)' }} />
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </>
+      )}
     </>
   )
 }
