@@ -49,7 +49,7 @@ export default function HomePage() {
 
       {/* Hero */}
       <section
-        className="relative w-full h-[80vh] sm:h-screen flex items-center justify-center overflow-hidden"
+        className="relative w-full h-screen flex items-center justify-center overflow-hidden"
       >
         {/* Background — mobile uses sm_bg, desktop uses hero-bg-v2 */}
         <div
