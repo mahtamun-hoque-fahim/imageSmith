@@ -5,10 +5,15 @@ import Navbar from '@/components/layout/Navbar'
 import Link from 'next/link'
 import { ArrowLeft, Mail, ExternalLink, Send } from 'lucide-react'
 import { useState } from 'react'
+import { useReveal } from '@/hooks/useReveal'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  const refHeader = useReveal<HTMLDivElement>()
+  const refForm   = useReveal<HTMLDivElement>()
+  const refInfo   = useReveal<HTMLDivElement>()
 
   async function handleSubmit() {
     if (!form.name || !form.email || !form.message) return
@@ -33,7 +38,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-bg">
+    <main className="min-h-screen bg-bg page-transition">
 
       <Navbar />
 
@@ -45,15 +50,18 @@ export default function ContactPage() {
           Back to converter
         </Link>
 
-        <h1 className="text-4xl font-bold text-text mb-4">Contact</h1>
-        <p className="text-text-muted text-lg mb-16">
-          Got a bug, a feature idea, or just want to say hi? Fill in the form or reach out directly.
-        </p>
+        {/* Header */}
+        <div ref={refHeader} className="reveal">
+          <h1 className="text-4xl font-bold text-text mb-4">Contact</h1>
+          <p className="text-text-muted text-lg mb-16">
+            Got a bug, a feature idea, or just want to say hi? Fill in the form or reach out directly.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-16">
 
           {/* Form */}
-          <div className="flex flex-col gap-5">
+          <div ref={refForm} className="reveal flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <label className="text-sm text-text-muted">Name</label>
               <input
@@ -81,14 +89,14 @@ export default function ContactPage() {
               <textarea
                 value={form.message}
                 onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                placeholder="What's on your mind?"
+                placeholder="What\'s on your mind?"
                 rows={6}
                 className="bg-transparent border border-border text-text px-4 py-3 text-sm placeholder:text-text-faint focus:outline-none focus:border-accent transition-colors resize-none rounded-lg"
               />
             </div>
 
             {status === 'success' && (
-              <p className="text-sm text-green-400">Message sent. I'll get back to you soon.</p>
+              <p className="text-sm text-green-400">Message sent. I\'ll get back to you soon.</p>
             )}
             {status === 'error' && (
               <p className="text-sm text-red-400">Something went wrong. Try again.</p>
@@ -104,8 +112,8 @@ export default function ContactPage() {
             </button>
           </div>
 
-          {/* Contact info */}
-          <div className="flex flex-col gap-6 pt-1">
+          {/* Contact info — slides in from right with delay */}
+          <div ref={refInfo} className="reveal delay-200 flex flex-col gap-6 pt-1">
             <p className="text-sm text-text-muted uppercase tracking-widest">Reach out directly</p>
 
             <a
