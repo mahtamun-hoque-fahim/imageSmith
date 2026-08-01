@@ -1,19 +1,20 @@
+'use client'
+
 import type { Metadata } from 'next'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'Privacy Policy — ImageSmith',
-  description: 'ImageSmith privacy policy. Your files never leave your device. No tracking, no uploads, no account required.',
-}
+import { useReveal } from '@/hooks/useReveal'
 
 const LAST_UPDATED = 'July 25, 2026'
 
 export default function PrivacyPage() {
+  const refHeader   = useReveal<HTMLDivElement>()
+  const refSections = useReveal<HTMLDivElement>()
+
   return (
-    <main className="min-h-screen bg-bg">
+    <main className="min-h-screen bg-bg page-transition">
 
       <Navbar />
 
@@ -26,13 +27,13 @@ export default function PrivacyPage() {
         </Link>
 
         {/* Header */}
-        <div className="mb-16">
+        <div ref={refHeader} className="reveal mb-16">
           <h1 className="text-4xl font-bold text-text mb-4">Privacy Policy</h1>
           <p className="text-sm text-text-muted">Last updated: {LAST_UPDATED}</p>
         </div>
 
         {/* Sections */}
-        <div className="flex flex-col gap-12 text-text-muted text-[15px] leading-relaxed">
+        <div ref={refSections} className="reveal flex flex-col gap-12 text-text-muted text-[15px] leading-relaxed">
 
           <section className="flex flex-col gap-3">
             <h2 className="text-lg font-semibold text-text">The short version</h2>
@@ -49,7 +50,7 @@ export default function PrivacyPage() {
               All image conversion happens locally on your device using WebAssembly (libwebp compiled to WASM). No file data, image content, or metadata is transmitted to any server at any point during the conversion process.
             </p>
             <p>
-              Files are loaded into your browser's memory, processed, and the resulting WebP output is made available for download — entirely offline. Once you close or refresh the page, all file data is discarded.
+              Files are loaded into your browser\'s memory, processed, and the resulting WebP output is made available for download — entirely offline. Once you close or refresh the page, all file data is discarded.
             </p>
           </section>
 
@@ -81,8 +82,8 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-semibold text-text">4. Third-party services</h2>
             <p>ImageSmith uses the following infrastructure providers:</p>
             <ul className="flex flex-col gap-2 pl-4">
-              <li className="flex gap-2"><span className="text-text shrink-0">—</span> <span><strong className="text-text">Vercel</strong> — hosting and edge delivery. Subject to <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-text underline hover:opacity-70 transition-opacity">Vercel's Privacy Policy</a>.</span></li>
-              <li className="flex gap-2"><span className="text-text shrink-0">—</span> <span><strong className="text-text">Neon</strong> — PostgreSQL database for contact form messages and reviews. Subject to <a href="https://neon.tech/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-text underline hover:opacity-70 transition-opacity">Neon's Privacy Policy</a>.</span></li>
+              <li className="flex gap-2"><span className="text-text shrink-0">—</span> <span><strong className="text-text">Vercel</strong> — hosting and edge delivery. Subject to <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-text underline hover:opacity-70 transition-opacity">Vercel\'s Privacy Policy</a>.</span></li>
+              <li className="flex gap-2"><span className="text-text shrink-0">—</span> <span><strong className="text-text">Neon</strong> — PostgreSQL database for contact form messages and reviews. Subject to <a href="https://neon.tech/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-text underline hover:opacity-70 transition-opacity">Neon\'s Privacy Policy</a>.</span></li>
             </ul>
             <p>No data is sold, shared with, or disclosed to any other third party for any purpose.</p>
           </section>
@@ -99,7 +100,7 @@ export default function PrivacyPage() {
           <div className="border-t border-border" />
 
           <section className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold text-text">6. Children's privacy</h2>
+            <h2 className="text-lg font-semibold text-text">6. Children\'s privacy</h2>
             <p>
               ImageSmith is a general-purpose developer tool and is not directed at children under the age of 13. We do not knowingly collect personal information from children.
             </p>
@@ -110,7 +111,7 @@ export default function PrivacyPage() {
           <section className="flex flex-col gap-3">
             <h2 className="text-lg font-semibold text-text">7. Changes to this policy</h2>
             <p>
-              If this policy changes in any meaningful way, the "Last updated" date at the top of this page will reflect that. Continued use of ImageSmith after any changes constitutes acceptance of the updated policy.
+              If this policy changes in any meaningful way, the \"Last updated\" date at the top of this page will reflect that. Continued use of ImageSmith after any changes constitutes acceptance of the updated policy.
             </p>
           </section>
 
