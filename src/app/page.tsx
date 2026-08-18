@@ -52,7 +52,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-bg overflow-x-hidden page-transition">
+    <main className="min-h-screen bg-bg page-transition">
 
       <Navbar />
 
