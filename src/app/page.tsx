@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
+import SurfaceCards from '@/components/surfaces/SurfaceCards'
 import { useEffect, useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
@@ -144,6 +145,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Surfaces — Browser / CLI / MCP */}
+      <SurfaceCards />
 
       {/* Reviews */}
       <section ref={refReviews} className="reveal border-t border-border">
