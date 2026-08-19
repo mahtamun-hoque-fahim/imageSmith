@@ -180,26 +180,22 @@ body {
   animation: page-enter 0.28s var(--ease-out) both;
 }
 
-/* ── Shimmer button ─────────────────────────────────────────────────────── */
-@keyframes shimmer-sweep {
-  0%   { transform: translateX(-180%) skewX(-12deg); }
-  100% { transform: translateX(320%) skewX(-12deg); }
+/* ── CTA shimmer ────────────────────────────────────────────────────────── */
+@keyframes shimmer-bg {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-.shimmer-el {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 45%;
-  height: 100%;
+.is-shimmering {
   background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0)    0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    rgba(255, 255, 255, 0)    100%
-  );
-  transform: translateX(-180%) skewX(-12deg);
-  pointer-events: none;
-  z-index: 10;
+    90deg,
+    #ffffff 20%,
+    #c0c0c0 40%,
+    #f5f5f5 50%,
+    #c0c0c0 60%,
+    #ffffff 80%
+  ) !important;
+  background-size: 300% 100% !important;
+  animation: shimmer-bg 1s ease-in-out forwards;
 }
 

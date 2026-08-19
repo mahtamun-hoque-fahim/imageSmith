@@ -16,20 +16,36 @@ export default function HomePage() {
   const refReviews   = useReveal<HTMLElement>()
   const refFooter    = useReveal<HTMLElement>()
 
-  const shimmerRef = useRef<HTMLSpanElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   const triggerShimmer = useCallback(() => {
-    const el = shimmerRef.current
-    if (!el) return
-    el.style.animation = 'none'
-    void el.offsetHeight                                    // force reflow
-    el.style.animation = 'shimmer-sweep 0.65s ease-in-out forwards'
+    const btn = btnRef.current
+    if (!btn) return
+    btn.classList.remove('is-shimmering')
+    void btn.offsetWidth                    // force reflow — restarts animation
+    btn.classList.add('is-shimmering')
   }, [])
 
-  // Fire once after 1s on load
+  // Remove class when animation ends so next trigger restarts cleanly
   useEffect(() => {
-    const t = setTimeout(triggerShimmer, 1000)
-    return () => clearTimeout(t)
+    const btn = btnRef.current
+    if (!btn) return
+    const onEnd = () => btn.classList.remove('is-shimmering')
+    btn.addEventListener('animationend', onEnd)
+    return () => btn.removeEventListener('animationend', onEnd)
+  }, [])
+
+  // Fire after 1s on load, then every 10s
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>
+    const timer = setTimeout(() => {
+      triggerShimmer()
+      interval = setInterval(triggerShimmer, 10000)
+    }, 1000)
+    return () => {
+      clearTimeout(timer)
+      clearInterval(interval)
+    }
   }, [triggerShimmer])
 
   useEffect(() => {
@@ -93,13 +109,13 @@ export default function HomePage() {
           <p className="hero-reveal text-white text-base sm:text-xl font-medium">Fastest Conversion</p>
           <h1 className="hero-reveal-delay font-display font-bold text-5xl sm:text-8xl text-white leading-none">to .webp format.</h1>
           <button
+            ref={btnRef}
             onClick={() => document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })}
             onMouseEnter={triggerShimmer}
-            className="hero-reveal-late mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg relative overflow-hidden"
+            className="hero-reveal-late mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg"
           >
-            <span ref={shimmerRef} className="shimmer-el" />
-            <Download className="w-5 h-5 relative z-10" />
-            <span className="relative z-10">Drop Your Files</span>
+            <Download className="w-5 h-5" />
+            Drop Your Files
           </button>
         </div>
       </section>
