@@ -180,22 +180,5 @@ body {
   animation: page-enter 0.28s var(--ease-out) both;
 }
 
-/* ── CTA shimmer ────────────────────────────────────────────────────────── */
-@keyframes shimmer-bg {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
 
-.is-shimmering {
-  background: linear-gradient(
-    90deg,
-    #ffffff 20%,
-    #c0c0c0 40%,
-    #f5f5f5 50%,
-    #c0c0c0 60%,
-    #ffffff 80%
-  ) !important;
-  background-size: 300% 100% !important;
-  animation: shimmer-bg 1s ease-in-out forwards;
-}
 
