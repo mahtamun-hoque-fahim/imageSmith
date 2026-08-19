@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import ReviewList from '@/components/reviews/ReviewList'
 import ConverterWrapper from '@/components/converter/ConverterWrapper'
 import SurfaceCards from '@/components/surfaces/SurfaceCards'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
 export default function HomePage() {
@@ -15,6 +15,22 @@ export default function HomePage() {
   const refConverter = useReveal<HTMLElement>()
   const refReviews   = useReveal<HTMLElement>()
   const refFooter    = useReveal<HTMLElement>()
+
+  const shimmerRef = useRef<HTMLSpanElement>(null)
+
+  const triggerShimmer = useCallback(() => {
+    const el = shimmerRef.current
+    if (!el) return
+    el.style.animation = 'none'
+    void el.offsetHeight                                    // force reflow
+    el.style.animation = 'shimmer-sweep 0.65s ease-in-out forwards'
+  }, [])
+
+  // Fire once after 1s on load
+  useEffect(() => {
+    const t = setTimeout(triggerShimmer, 1000)
+    return () => clearTimeout(t)
+  }, [triggerShimmer])
 
   useEffect(() => {
     const onScroll = () => setOffset(window.scrollY * 0.4)
@@ -78,8 +94,10 @@ export default function HomePage() {
           <h1 className="hero-reveal-delay font-display font-bold text-5xl sm:text-8xl text-white leading-none">to .webp format.</h1>
           <button
             onClick={() => document.getElementById('converter-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="btn-glare hero-reveal-late mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg relative overflow-hidden"
+            onMouseEnter={triggerShimmer}
+            className="hero-reveal-late mt-2 sm:mt-4 px-8 py-4 sm:px-14 sm:py-5 bg-white text-black font-bold text-base sm:text-lg flex items-center gap-3 cursor-pointer border-0 rounded-lg relative overflow-hidden"
           >
+            <span ref={shimmerRef} className="shimmer-el" />
             <Download className="w-5 h-5 relative z-10" />
             <span className="relative z-10">Drop Your Files</span>
           </button>

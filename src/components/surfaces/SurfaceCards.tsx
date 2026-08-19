@@ -1,7 +1,7 @@
 'use client'
 
+import { useRef, useEffect, useState } from 'react'
 import { Globe, Terminal, Bot, ArrowRight, Lock } from 'lucide-react'
-import { useReveal } from '@/hooks/useReveal'
 
 interface Surface {
   icon: React.ElementType
@@ -44,7 +44,34 @@ const SURFACES: Surface[] = [
 ]
 
 export default function SurfaceCards() {
-  const ref = useReveal<HTMLDivElement>()
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState<boolean[]>([false, false, false])
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        obs.disconnect()
+        // Stagger each card 180ms apart
+        SURFACES.forEach((_, i) => {
+          setTimeout(() => {
+            setRevealed(prev => {
+              const next = [...prev]
+              next[i] = true
+              return next
+            })
+          }, i * 180)
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   return (
     <section className="border-t border-border">
@@ -64,13 +91,16 @@ export default function SurfaceCards() {
         </div>
 
         {/* Cards */}
-        <div ref={ref} className="reveal grid grid-cols-1 md:grid-cols-3 gap-4">
-          {SURFACES.map(({ icon: Icon, label, title, desc, command, cta, live }) => (
+        <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {SURFACES.map(({ icon: Icon, label, title, desc, command, cta, live }, index) => (
             <div
               key={label}
-              className={`flex flex-col gap-4 bg-surface border border-border rounded-lg p-6 transition-opacity duration-300 ${
-                !live ? 'opacity-50' : ''
-              }`}
+              className="flex flex-col gap-4 bg-surface border border-border rounded-lg p-6"
+              style={{
+                opacity:   revealed[index] ? (live ? 1 : 0.5) : 0,
+                transform: revealed[index] ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+              }}
             >
               {/* Icon + badge */}
               <div className="flex items-start justify-between">
