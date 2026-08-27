@@ -37,9 +37,9 @@ const SURFACES: Surface[] = [
     label: 'AI Agent',
     title: 'MCP server',
     desc: 'Let your AI agent call ImageSmith as a tool mid-session. Convert assets without breaking flow.',
-    command: null,
-    cta: { label: 'Coming soon', href: null },
-    live: false,
+    command: 'imagesmith mcp',
+    cta: { label: 'View on npm', href: 'https://www.npmjs.com/package/@imagesmith/cli' },
+    live: true,
   },
 ]
 
