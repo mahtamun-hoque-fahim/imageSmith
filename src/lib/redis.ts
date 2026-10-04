@@ -44,6 +44,26 @@ function getLimiter(name: string, tokens: number, window: Duration): Ratelimit {
   return limiter
 }
 
+// Health check for the admin dashboard.
+export async function pingRedis(): Promise<boolean> {
+  try {
+    await getRedis().ping()
+    return true
+  } catch {
+    return false
+  }
+}
+
+// Writes a short-lived key so Upstash counts the database as active.
+export async function touchRedis(): Promise<boolean> {
+  try {
+    await getRedis().set('imagesmith:keepalive', String(Date.now()), { ex: 60 * 60 * 48 })
+    return true
+  } catch {
+    return false
+  }
+}
+
 // Returns true when the request may proceed. Fails open if Redis is
 // unreachable (logged), matching the reviews endpoint.
 export async function allowRequest(

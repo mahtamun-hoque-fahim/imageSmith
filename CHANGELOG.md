@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.2.2] — 2026-10-04
+
+### Added
+- Rate limiter health indicator on the admin dashboard (`GET /api/admin/health`, admin session required). Shows "Rate limiter OK / down" so a dead Redis is visible. Background: the Upstash database was auto-deleted for inactivity and all limiters silently failed open.
+- Daily keep-alive cron (`vercel.json` → `GET /api/cron/keepalive`) that writes a short-lived key to Redis. Protected by `CRON_SECRET` (Vercel sends it as a Bearer token); fails closed if the variable is unset. The Cloudflare mirror shares the same Redis, so one cron keeps both deploys alive.
+
+### Env
+- New: `CRON_SECRET` (required for the cron).
+
 ## [v0.2.1] — 2026-10-04
 
 ### Security
