@@ -51,6 +51,8 @@ src/
       contact/route.ts        POST (rate limited)
       stats/route.ts          GET (admin) + POST (rate limited)
       admin/contacts/route.ts GET + PATCH (admin)
+      admin/health/route.ts   GET (admin) Redis status
+      cron/keepalive/route.ts GET (cron) Redis keep-alive
       auth/[...all]/route.ts  Better Auth handler
   components/                 converter, reviews, surfaces, layout
   lib/
@@ -63,6 +65,7 @@ src/
     redis.ts                  Upstash limiters
   proxy.ts                    optimistic /admin redirect (not authorization)
 scripts/copy-wasm.js          copies WASM into public/wasm
+vercel.json                   daily cron → /api/cron/keepalive
 drizzle/                      generated migrations
 ```
 
@@ -144,9 +147,11 @@ No image data is ever stored.
 | POST | /api/stats | none | 60/IP/min | `{ type: 'view' \| 'conversion' }`, skips `ADMIN_IPS` |
 | GET | /api/admin/contacts | admin session | — | all messages |
 | PATCH | /api/admin/contacts | admin session | — | `{ id }` marks read |
+| GET | /api/admin/health | admin session | — | `{ redis: 'ok' \| 'down' }`, drives the dashboard indicator |
+| GET | /api/cron/keepalive | Bearer `CRON_SECRET` | — | daily write to Redis; 401 if `CRON_SECRET` unset |
 | * | /api/auth/[...all] | — | — | Better Auth; email sign-up disabled |
 
-Rate limiting uses Upstash Redis keyed by `getClientIp` (`src/lib/ip.ts`). Limiters fail open if Redis is unreachable and log the failure.
+Rate limiting uses Upstash Redis keyed by `getClientIp` (`src/lib/ip.ts`). Limiters fail open if Redis is unreachable and log the failure. The admin dashboard shows a Redis health indicator, and a daily cron keeps the free-tier database from being deleted for inactivity.
 
 **Admin check:** `getAdminSession(req.headers)` in `src/lib/admin.ts` validates the session against the database; if `ADMIN_EMAIL` is set, only that account passes.
 
@@ -165,6 +170,7 @@ Rate limiting uses Upstash Redis keyed by `getClientIp` (`src/lib/ip.ts`). Limit
 | BETTER_AUTH_URL | yes | Public app URL for auth origin checks |
 | ADMIN_EMAIL | recommended | Only this account counts as admin |
 | ADMIN_IPS | optional | Comma-separated IPs excluded from stats |
+| CRON_SECRET | yes (for cron) | Bearer secret for `/api/cron/keepalive` (`openssl rand -base64 32`) |
 | ALLOW_SIGNUP | leave unset | `true` only to seed the first admin, then remove |
 
 Removed in v0.2.1: `ADMIN_SECRET`, `NEXT_PUBLIC_ADMIN_SECRET`. Delete them wherever they are set. Never put secrets in `NEXT_PUBLIC_*`.
@@ -258,5 +264,7 @@ In order:
 **2026-06-27.** Upstash Redis rate limiter on POST /api/reviews. (Superseded 2026-10-04: contact and stats POST are limited too.)
 
 **2026-07-25.** Better Auth added for the admin dashboard (admin-only; visitors still never need an account). Contacts and stats tables added. The original "no auth, reviews table only" scope in this file was superseded.
+
+**2026-10-04.** Upstash Redis was auto-deleted after long inactivity, so all limiters had been failing open. Added a dashboard health indicator and a daily keep-alive cron (v0.2.2).
 
 **2026-10-04.** Security hardening (v0.2.1): admin APIs moved from a shared secret (unset in production, so the public default `'changeme'` was accepted) to server-validated sessions; sign-up disabled by default; contact and stats rate limited; client IP derived from platform-trusted headers; docs synced to the code.

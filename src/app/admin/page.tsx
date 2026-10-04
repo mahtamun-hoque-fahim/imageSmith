@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
-import { CheckCheck, RefreshCw, LogOut, Mail, MessageSquare, Star } from 'lucide-react'
+import { CheckCheck, RefreshCw, LogOut, Mail, MessageSquare, Star, ShieldCheck, ShieldAlert } from 'lucide-react'
 import Link from 'next/link'
 
 type Contact = {
@@ -35,6 +35,7 @@ export default function AdminPage() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [reviews, setReviews] = useState<Review[]>([])
   const [statsData, setStatsData] = useState<Stats | null>(null)
+  const [redisStatus, setRedisStatus] = useState<'ok' | 'down' | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function AdminPage() {
         router.push('/login')
         return
       }
-      await Promise.all([fetchContacts(), fetchReviews(), fetchStats()])
+      await Promise.all([fetchContacts(), fetchReviews(), fetchStats(), fetchHealth()])
       setLoading(false)
     }
     init()
@@ -53,6 +54,14 @@ export default function AdminPage() {
   async function fetchStats() {
     const res = await fetch('/api/stats')
     if (res.ok) setStatsData(await res.json())
+  }
+
+  async function fetchHealth() {
+    const res = await fetch('/api/admin/health')
+    if (res.ok) {
+      const data = await res.json()
+      setRedisStatus(data.redis === 'ok' ? 'ok' : 'down')
+    }
   }
 
   async function fetchContacts() {
@@ -102,8 +111,17 @@ export default function AdminPage() {
           <span className="text-text-muted text-sm">/ Admin</span>
         </div>
         <div className="flex items-center gap-4">
+          {redisStatus && (
+            <span
+              className={`flex items-center gap-1.5 text-xs ${redisStatus === 'ok' ? 'text-emerald-400' : 'text-red-400'}`}
+              title="Upstash Redis powers the rate limiters. When it is down they fail open."
+            >
+              {redisStatus === 'ok' ? <ShieldCheck className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
+              Rate limiter {redisStatus === 'ok' ? 'OK' : 'down'}
+            </span>
+          )}
           <button
-            onClick={() => { fetchContacts(); fetchReviews(); fetchStats() }}
+            onClick={() => { fetchContacts(); fetchReviews(); fetchStats(); fetchHealth() }}
             className="flex items-center gap-2 text-sm text-text-muted hover:text-text transition-colors"
           >
             <RefreshCw className="w-4 h-4" />

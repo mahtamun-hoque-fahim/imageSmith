@@ -67,7 +67,7 @@ BETTER_AUTH_SECRET
 BETTER_AUTH_URL
 ```
 
-Optional: `ADMIN_EMAIL` (only this account is admin), `ADMIN_IPS` (excluded from stats), `ALLOW_SIGNUP` (leave unset; `true` only to seed the first admin).
+`CRON_SECRET` (daily Redis keep-alive cron on Vercel). Optional: `ADMIN_EMAIL` (only this account is admin), `ADMIN_IPS` (excluded from stats), `ALLOW_SIGNUP` (leave unset; `true` only to seed the first admin).
 
 Never put secrets in `NEXT_PUBLIC_*` variables — they ship to the browser.
 

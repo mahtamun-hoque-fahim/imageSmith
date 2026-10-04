@@ -73,7 +73,7 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 ## Current State
 
 ```
-Status: v0.2.1 — live, security-hardened
+Status: v0.2.2 — live, security-hardened, Redis health + keep-alive
 Last updated: 2026-10-04
 
 What works:

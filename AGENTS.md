@@ -13,13 +13,13 @@ git config user.email "mahtamunhoquefahim@gmail.com"
 
 ## Current State
 
-- Version: v0.2.1 (security hardening on top of v0.2.0)
+- Version: v0.2.2 (Redis health indicator + keep-alive cron on top of the v0.2.1 security hardening)
 - Live: converter (single, batch, folder, ZIP input), reviews, contact form, /about, /privacy, admin dashboard (messages, reviews, stats)
 - Auth: Better Auth email+password for ONE admin account; public sign-up disabled by default
 - Admin APIs authorize with a server-validated session (`src/lib/admin.ts`); no shared secrets
-- Rate limits (Upstash): reviews 1/IP/hour, contact 5/IP/hour, stats POST 60/IP/min
+- Rate limits (Upstash): reviews 1/IP/hour, contact 5/IP/hour, stats POST 60/IP/min. Limiters fail open if Redis is down; the admin dashboard shows Redis status and `vercel.json` runs a daily keep-alive (`CRON_SECRET`)
 - Verified locally: `npx tsc --noEmit` clean, `npm run build` clean (13 routes), auth gates and validation smoke-tested
-- Open: no test runner, no lint script, CSP keeps `unsafe-eval`/`unsafe-inline` (see Security Gotchas), POST-BUILD audits (airborne, humanizer, cave-man, council POST) not recorded as done
+- Open: Redis must be recreated (see Session Log), no test runner, no lint script, CSP keeps `unsafe-eval`/`unsafe-inline` (see Security Gotchas), POST-BUILD audits (airborne, humanizer, cave-man, council POST) not recorded as done
 
 ## Setup & Commands
 
@@ -51,6 +51,8 @@ git config user.email "mahtamunhoquefahim@gmail.com"
 - Auth sign-up stays closed: `disableSignUp` is on unless `ALLOW_SIGNUP=true`. Set it only to seed an admin, then remove it and redeploy
 - Optional `ADMIN_EMAIL` restricts admin to one account (recommended in production)
 - Public write endpoints (`/api/reviews`, `/api/contact`, `/api/stats` POST) are rate limited with Upstash; do not remove or bypass this
+- Free Upstash databases are deleted after long inactivity. Keep the daily cron in `vercel.json` and `CRON_SECRET` set; if the dashboard says "Rate limiter down", check Upstash first
+- `/api/cron/keepalive` must keep failing closed when `CRON_SECRET` is unset
 - Always derive the client IP with `getClientIp` from `src/lib/ip.ts`; never read `x-forwarded-for` directly (client-forgeable on Cloudflare)
 - Never write a fallback for a secret (`?? 'changeme'`); fail closed
 - Review content must be HTML-stripped and length-capped (max 500 chars) before writing to Neon
@@ -60,6 +62,10 @@ git config user.email "mahtamunhoquefahim@gmail.com"
 ## Session Log
 
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
+
+### 2026-10-04 (Redis health + keep-alive, v0.2.2)
+- Did: Found the Upstash database had been auto-deleted for inactivity, so every limiter had been failing open. Added `/api/admin/health` + a "Rate limiter OK / down" chip on the dashboard, and a daily Vercel cron (`/api/cron/keepalive`, Bearer `CRON_SECRET`, fails closed). v0.2.1 was merged and verified on production first: old `changeme` header returns 401, sign-up disabled, session login works.
+- Follow-up for Fahim: create a new Upstash database and update `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`; add `CRON_SECRET` in Vercel; mirror the same on Cloudflare; redeploy; re-run the contact rate-limit test (five 400s then a 429).
 
 ### 2026-10-04 (security hardening, v0.2.1)
 - Did: Audited the repo. Replaced the shared-secret admin API (live behaviour: `ADMIN_SECRET` unset on Vercel, so the public default `'changeme'` was accepted) with server-validated Better Auth sessions; closed public sign-up; added rate limits to contact and stats; added trusted client-IP helper (fixes reviews limiter bypass on the Cloudflare mirror); added input type checks; added `.env.example`.
