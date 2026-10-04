@@ -56,9 +56,7 @@ export default function AdminPage() {
   }
 
   async function fetchContacts() {
-    const res = await fetch('/api/admin/contacts', {
-      headers: { 'x-admin-secret': process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '' },
-    })
+    const res = await fetch('/api/admin/contacts')
     if (res.ok) setContacts(await res.json())
   }
 
@@ -73,10 +71,7 @@ export default function AdminPage() {
   async function markRead(id: string) {
     await fetch('/api/admin/contacts', {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-admin-secret': process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     })
     setContacts(prev => prev.map(m => m.id === id ? { ...m, read: true } : m))

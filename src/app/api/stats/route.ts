@@ -2,17 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDb } from '@/lib/db'
 import { stats } from '@/lib/db/schema'
 import { eq, sql } from 'drizzle-orm'
-import { auth } from '@/lib/auth'
+import { getAdminSession } from '@/lib/admin'
+import { allowRequest } from '@/lib/redis'
+import { getClientIp } from '@/lib/ip'
 
 export const runtime = 'edge'
 
 const STATS_ID = 'global'
 const ADMIN_IPS = (process.env.ADMIN_IPS ?? '').split(',').map(s => s.trim()).filter(Boolean)
-
-function isAdminIp(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? ''
-  return ADMIN_IPS.includes(ip)
-}
 
 async function ensureStats(db: ReturnType<typeof getDb>) {
   await db.insert(stats).values({
@@ -22,10 +19,9 @@ async function ensureStats(db: ReturnType<typeof getDb>) {
   }).onConflictDoNothing()
 }
 
-// GET — fetch stats (session protected)
+// GET — fetch stats (admin session required)
 export async function GET(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers })
-  if (!session) {
+  if (!(await getAdminSession(req.headers))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -35,13 +31,27 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(row)
 }
 
-// POST — increment a counter (public, but skips admin IPs)
+// POST — increment a counter (public, rate limited, skips admin IPs)
 export async function POST(req: NextRequest) {
-  if (isAdminIp(req)) {
+  const ip = getClientIp(req)
+
+  if (ADMIN_IPS.includes(ip)) {
     return NextResponse.json({ skipped: true })
   }
 
-  const { type } = await req.json()
+  // 60 counter hits per IP per minute
+  if (!(await allowRequest('stats', 60, '1 m', ip))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  const type = (body as { type?: unknown } | null)?.type
   if (type !== 'view' && type !== 'conversion') {
     return NextResponse.json({ error: 'Invalid type' }, { status: 400 })
   }

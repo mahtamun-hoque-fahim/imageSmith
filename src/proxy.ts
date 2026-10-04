@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSessionCookie } from 'better-auth/cookies'
 
+// Optimistic UX redirect only: it checks that a session cookie EXISTS, not that it
+// is valid. Real authorization happens server-side in lib/admin.ts (getAdminSession).
 export function proxy(request: NextRequest) {
   const session = getSessionCookie(request)
 
