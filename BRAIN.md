@@ -29,8 +29,8 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 - [LOCKED] Client-side only via libwebp WASM — files never leave the user's machine, no server processing
 - [LOCKED] JSZip for output — rebuilds the exact folder tree in the output ZIP
 - [LOCKED] `<input webkitdirectory>` for folder ingestion — uses `file.webkitRelativePath` to preserve paths
-- [LOCKED] No authentication — zero friction, open and use
-- [LOCKED] Reviews/testimonials system — Neon + Drizzle for storing submitted reviews
+- [LOCKED] No visitor authentication — zero friction, open and use. Better Auth exists ONLY for the single-admin dashboard; public sign-up is disabled
+- [LOCKED] Neon + Drizzle stores reviews, contact messages, usage stats and the Better Auth tables (user, session, account, verification)
 - [LOCKED] V1 = web app only. V2 = CLI tool (out of scope for V1, do not implement)
 - [LOCKED] No Supabase — Neon only
 - [LOCKED] Conversion engine is libwebp WASM on ALL browsers — Canvas API is NOT used (Firefox cannot encode WebP via canvas.toBlob)
@@ -64,38 +64,36 @@ Done feels like: drop a ZIP or folder of 1000 images in any format, get back an 
 - Never paywalled or subscription-gated — that's the entire reason it exists
 - Never a server-side file processor — files must never leave the user's machine
 - Never a general image editor — no crop, resize, filters, or format conversion beyond WebP
-- Never account-required — no sign-up, no login wall
+- Never account-required for visitors — no sign-up, no login wall (the admin login is not visitor-facing)
 - Never a SaaS with plans and limits — it is and will always be completely free
-- Never a CLI tool in V1 — that is V2, do not scope-creep it in
+- Never CLI code in this repo — the CLI and MCP server ship separately as `@imagesmith/cli`
 
 ---
 
 ## Current State
 
 ```
-Status: V1 built — awaiting deploy
-Last updated: 2026-06-28
+Status: v0.2.1 — live, security-hardened
+Last updated: 2026-10-04
 
 What works:
-- Full converter UI (single file, batch, folder, ZIP input)
-- libwebp WASM loaded from /public/wasm via script-tag injection
-- JSZip folder-structure-preserving output ZIP
-- Chunked batch processing (10 images at a time)
-- Firefox ZIP fallback path with clear browser notice
-- Quality slider (1–100)
-- /api/reviews — GET + POST with Upstash Redis rate limiting (1/hr per IP)
-- Neon + Drizzle reviews table (reviews only, no other DB usage)
-- Full POST-BUILD pipeline: waterborne, motion-hive, valley-of-death complete
-- Build: PASS (0 TS errors, 0 Turbopack errors)
+- Full converter UI (single file, batch, folder, ZIP input), chunked 10 at a time
+- libwebp WASM served same-origin from /public/wasm (script-tag injection)
+- JSZip folder-structure-preserving output ZIP, Firefox ZIP fallback
+- Reviews (GET/POST, 1/IP/hour), contact form (5/IP/hour), stats (60/IP/min)
+- Admin dashboard (messages, reviews, stats) behind a validated Better Auth session; sign-up disabled
+- Pages: /, /about, /contact, /privacy, /login, /admin
+- Build: PASS, tsc: PASS
 
 What's broken or incomplete:
-- Neon + Upstash env vars not yet set (blocking deploy)
-- @opennextjs/cloudflare deploy not yet attempted
-- sentinel, airborne, humanizer, cave-man, council POST still pending
+- No test runner and no lint script
+- CSP keeps unsafe-eval / unsafe-inline (WASM embind + Next inline scripts)
+- airborne, humanizer, cave-man, council POST not recorded as done
 
 What's next:
-- sentinel (security audit) — Step 4 in POST pipeline
-- Set Neon + Upstash env vars → deploy to Vercel → test WASM CSP headers live
+- Remove old ADMIN_SECRET / NEXT_PUBLIC_ADMIN_SECRET env vars, set ADMIN_EMAIL
+- Add Vitest, add lint script
+- Finish POST-BUILD pipeline
 ```
 
 ---
@@ -108,24 +106,25 @@ What's next:
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 |
 | Database | Neon (PostgreSQL) + Drizzle ORM |
-| Auth | None — no auth in V1 |
+| Auth | Better Auth, single admin account, sign-up disabled |
 | Conversion Engine | libwebp compiled to WASM (client-side) |
 | ZIP Output | JSZip |
-| Deployment | Vercel (primary) + Cloudflare Pages (secondary) |
+| Rate limiting | Upstash Redis |
+| Deployment | Vercel (primary) + Cloudflare Workers via @opennextjs/cloudflare (mirror) |
 | Edge Runtime | Required — neon-http driver only |
 
 ---
 
 ## Constraints & Non-Negotiables
 
-- Must deploy to both Vercel and Cloudflare Pages (Edge Runtime compatible)
+- Must deploy to both Vercel and Cloudflare Workers (Edge Runtime compatible)
 - No emojis in UI — lucide-react icons only
 - Dark-first, no light mode
 - No Supabase — Neon only
 - Files must never leave the client — all processing is browser-side
-- libwebp WASM must load from a CDN or bundled asset — not a remote API call
+- libwebp WASM is served same-origin from /public/wasm — not a remote API call
 - No hand-rolled SVGs — lucide-react only
-- No auth in V1 — not even optional login
+- No visitor-facing auth — the only login is the admin dashboard
 
 ---
 
@@ -133,10 +132,10 @@ What's next:
 
 - The conversion engine is **libwebp WASM**, not Canvas API — do not fall back to `canvas.toBlob('image/webp')` even if WASM feels complex
 - JSZip rebuilds the **exact folder tree** using `file.webkitRelativePath` — do not flatten the output
-- The reviews system is the **only** Neon/Drizzle usage — do not add any other DB tables unless Fahim explicitly asks
+- Neon/Drizzle holds reviews, contacts, stats and the Better Auth tables — do not add other tables unless Fahim explicitly asks
 - Edge Runtime is required for Cloudflare — always use `neon-http` driver, never `neon-ws` or `pg`
-- V1 has **no auth at all** — do not add Better Auth, middleware auth guards, or any login system
+- Auth is **admin-only**: use `getAdminSession` in `src/lib/admin.ts` for admin routes; never add visitor sign-up; never put secrets in `NEXT_PUBLIC_*`
 
 ---
 
-*Last updated by Singularity on 2026-06-27*
+*Last updated 2026-10-04 (security hardening sync)*

@@ -26,10 +26,10 @@ ImageSmith ships across three surfaces — same privacy guarantee on all of them
 
 - **Next.js 16** (App Router) + TypeScript
 - **Tailwind CSS v4**
-- **libwebp WASM** (CDN) — client-side conversion engine
+- **libwebp WASM** (served same-origin from `/public/wasm`) — client-side conversion engine
 - **JSZip** — client-side ZIP pack/unpack
 - **Neon** (PostgreSQL) + **Drizzle ORM** — reviews table
-- **Better Auth** — admin dashboard authentication
+- **Better Auth** — single-admin dashboard authentication (public sign-up disabled)
 - **Upstash Redis** — rate limiting on review submissions
 - **Vercel Analytics** — page view and conversion tracking
 - **Vercel** (production) · **Cloudflare Workers** via `@opennextjs/cloudflare` (mirror)
@@ -50,7 +50,7 @@ ImageSmith ships across three surfaces — same privacy guarantee on all of them
 git clone https://github.com/mahtamun-hoque-fahim/imageSmith
 cd imageSmith
 npm install
-cp .env.example .env.local   # fill in values — see PLANNER.md → Env Vars
+cp .env.example .env.local   # fill in values — see .env.example and PLANNER.md → Env Vars
 npx drizzle-kit push
 npm run dev
 ```
@@ -67,14 +67,22 @@ BETTER_AUTH_SECRET
 BETTER_AUTH_URL
 ```
 
+Optional: `ADMIN_EMAIL` (only this account is admin), `ADMIN_IPS` (excluded from stats), `ALLOW_SIGNUP` (leave unset; `true` only to seed the first admin).
+
+Never put secrets in `NEXT_PUBLIC_*` variables — they ship to the browser.
+
 ## Scripts
 
 ```bash
 npm run dev          # local dev (Turbopack)
 npm run build        # production build
-npm run lint         # ESLint
-npx drizzle-kit push # push schema (dev only)
+npx tsc --noEmit     # type check (run before every push)
+npm run db:push      # push schema (dev only)
 ```
+
+## Admin access
+
+The `/admin` dashboard is for a single admin account. Public sign-up is disabled. To create the first admin, set `ALLOW_SIGNUP=true`, sign up once, then remove the variable and redeploy.
 
 ## Deploy
 

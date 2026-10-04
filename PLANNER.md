@@ -10,7 +10,7 @@
 
 **Key value.** Drop a folder or ZIP of 1000 images in any format. Get back an identical ZIP with every image converted to WebP. Same folder tree. Same filenames. Just `.webp`.
 
-**Current phase.** Planning
+**Current phase.** v0.2.1 live. Security hardening done; POST-BUILD audits and test setup remain.
 
 ---
 
@@ -20,13 +20,14 @@
 - Framework: Next.js 16 App Router
 - Language: TypeScript (strict)
 - Styling: Tailwind CSS v4
-- Database: Neon (PostgreSQL) — reviews table only
-- ORM: Drizzle
-- Auth: None — no auth in V1
-- Conversion engine: libwebp WASM (client-side, loaded from CDN)
+- Database: Neon (PostgreSQL) — reviews, contacts, stats, plus Better Auth tables
+- ORM: Drizzle (neon-http driver)
+- Auth: Better Auth, email + password, single admin account, public sign-up disabled
+- Conversion engine: libwebp WASM (client-side, served same-origin from `/public/wasm`)
 - ZIP output: JSZip (client-side)
-- Rate limiting: Upstash Redis (for /api/reviews only)
-- Deployment: Vercel (primary), Cloudflare Workers via @opennextjs/cloudflare (secondary)
+- Rate limiting: Upstash Redis (reviews, contact, stats POST)
+- Analytics: Vercel Analytics + first-party stats counters
+- Deployment: Vercel (primary), Cloudflare Workers via @opennextjs/cloudflare (mirror)
 
 **Deployment topology:**
 - `main` → Vercel production
@@ -35,33 +36,34 @@
 
 **Critical constraint:** Edge Runtime required for Cloudflare. Use `neon-http` driver only. Never `neon-ws` or `pg`.
 
-**WASM loading strategy:** libwebp WASM loads client-side from jsDelivr CDN, not bundled in the Next.js build. Reason: Cloudflare Workers have a 1MB compressed bundle limit; the WASM binary exceeds this. CDN loading avoids the limit entirely.
+**WASM loading strategy:** `scripts/copy-wasm.js` (run by `predev` and `prebuild`) copies the libwebp WASM into `public/wasm`. `src/lib/wasm/loader.ts` injects `/wasm/wasm_webp.js` as a script tag and the binary is fetched same-origin. This replaced the original jsDelivr CDN plan (2026-06-27). Public assets are served separately from the Worker bundle, so the Cloudflare 1MB limit is not hit.
 
 **Firefox folder upload fallback:** `webkitdirectory` is unavailable on Firefox. Firefox users upload a ZIP file instead — JSZip unpacks it client-side, converts all images, repacks with identical structure.
 
 **Folder structure (summary):**
 ```
-app/
-  page.tsx          — single-page app (converter + about + footer)
-  layout.tsx        — root layout, fonts, metadata
-  globals.css       — Tailwind v4 @theme tokens
-  api/
-    reviews/
-      route.ts      — GET + POST reviews
-components/
-  converter/        — ConverterZone, ProgressBar, DownloadButton
-  reviews/          — ReviewForm, ReviewList
-  layout/           — Footer
-lib/
-  db/
-    index.ts        — lazy-getDb (neon-http)
-    schema.ts       — reviews table
-  wasm/
-    loader.ts       — libwebp WASM init + singleton
-  zip/
-    processor.ts    — JSZip pack/unpack + convert orchestrator
-  redis.ts          — Upstash Redis rate limiter
-drizzle/            — generated migrations
+src/
+  app/
+    page.tsx, layout.tsx, globals.css, sitemap.ts, icon.svg
+    about/ contact/ privacy/ login/ admin/      pages
+    api/
+      reviews/route.ts        GET + POST (rate limited)
+      contact/route.ts        POST (rate limited)
+      stats/route.ts          GET (admin) + POST (rate limited)
+      admin/contacts/route.ts GET + PATCH (admin)
+      auth/[...all]/route.ts  Better Auth handler
+  components/                 converter, reviews, surfaces, layout
+  lib/
+    db/                       index.ts (lazy getDb, neon-http), schema.ts
+    wasm/loader.ts            libwebp init + singleton
+    zip/processor.ts          JSZip pack/unpack + convert orchestrator
+    auth.ts, auth-client.ts   Better Auth server + client
+    admin.ts                  getAdminSession (server-side admin check)
+    ip.ts                     getClientIp (platform-trusted client IP)
+    redis.ts                  Upstash limiters
+  proxy.ts                    optimistic /admin redirect (not authorization)
+scripts/copy-wasm.js          copies WASM into public/wasm
+drizzle/                      generated migrations
 ```
 
 ---
@@ -105,112 +107,130 @@ drizzle/            — generated migrations
 4. POST /api/reviews — rate limited by Upstash Redis (1 per IP per hour)
 5. Review appears in list immediately (optimistic update)
 
+### Flow 6: Contact message
+1. User opens `/contact` and submits name, email, message
+2. POST /api/contact — validated, rate limited (5 per IP per hour), stored in Neon
+
+### Flow 7: Admin
+1. Admin signs in at `/login` (no sign-up exists)
+2. `/admin` shows messages, reviews and stats
+3. Admin APIs validate the session server-side on every request
+
 ---
 
 ## DB Schema
 
-Drizzle schema lives in `lib/db/schema.ts`. Summary:
+Drizzle schema lives in `src/lib/db/schema.ts`.
 
-### reviews
-| column | type | notes |
+| table | purpose | notes |
 |---|---|---|
-| id | text PK | nanoid |
-| content | text | max 500 chars — enforced at API level |
-| createdAt | timestamp | defaultNow |
+| reviews | public star reviews | id, content (max 500, enforced in API), rating (default 5), createdAt |
+| contacts | contact-form messages | id, name, email, message, read, createdAt |
+| stats | global counters | single row `global`: pageViews, conversions, updatedAt |
+| user, session, account, verification | Better Auth | one admin user; sign-up disabled |
 
-No user table. No session table. No auth tables of any kind in V1.
+No image data is ever stored.
 
 ---
 
 ## API Routes
 
-| Method | Path | Auth | Body | Response |
+| Method | Path | Auth | Limit | Notes |
 |---|---|---|---|---|
-| GET | /api/reviews | none | — | `Review[]` (latest 50, ordered by createdAt desc) |
-| POST | /api/reviews | none (rate limited) | `{ content: string }` | `Review` |
+| GET | /api/reviews | none | — | latest 50 |
+| POST | /api/reviews | none | 1/IP/hour | `{ content, rating }`, HTML stripped, 429 on breach |
+| POST | /api/contact | none | 5/IP/hour | `{ name, email, message }`, validated and length-capped |
+| GET | /api/stats | admin session | — | counters |
+| POST | /api/stats | none | 60/IP/min | `{ type: 'view' \| 'conversion' }`, skips `ADMIN_IPS` |
+| GET | /api/admin/contacts | admin session | — | all messages |
+| PATCH | /api/admin/contacts | admin session | — | `{ id }` marks read |
+| * | /api/auth/[...all] | — | — | Better Auth; email sign-up disabled |
 
-**Rate limiting:** POST /api/reviews is rate limited via Upstash Redis — 1 request per IP per hour. Return 429 with message `"Too many reviews. Try again later."` on breach.
+Rate limiting uses Upstash Redis keyed by `getClientIp` (`src/lib/ip.ts`). Limiters fail open if Redis is unreachable and log the failure.
 
-**Input validation (POST):**
-- `content` required, string, min 1 char, max 500 chars
-- Strip any HTML before writing to Neon
-- Return 400 with message if validation fails
+**Admin check:** `getAdminSession(req.headers)` in `src/lib/admin.ts` validates the session against the database; if `ADMIN_EMAIL` is set, only that account passes.
 
 ---
 
 ## Env Vars
 
-| Name | Required | Description | Example |
-|---|---|---|---|
-| DATABASE_URL | yes | Neon pooled connection | `postgresql://...?sslmode=require` |
-| DATABASE_URL_UNPOOLED | yes | Neon direct connection (migrations) | `postgresql://...?sslmode=require` |
-| NEXT_PUBLIC_APP_URL | yes | Public app URL, client-readable | `https://imagesmith.vercel.app` |
-| UPSTASH_REDIS_REST_URL | yes | Upstash Redis REST endpoint | `https://....upstash.io` |
-| UPSTASH_REDIS_REST_TOKEN | yes | Upstash Redis REST token | `AX...` |
+| Name | Required | Description |
+|---|---|---|
+| DATABASE_URL | yes | Neon pooled connection |
+| DATABASE_URL_UNPOOLED | yes | Neon direct connection (migrations) |
+| NEXT_PUBLIC_APP_URL | yes | Public app URL (not a secret) |
+| UPSTASH_REDIS_REST_URL | yes | Upstash REST endpoint |
+| UPSTASH_REDIS_REST_TOKEN | yes | Upstash REST token |
+| BETTER_AUTH_SECRET | yes | Auth signing secret (`openssl rand -base64 32`) |
+| BETTER_AUTH_URL | yes | Public app URL for auth origin checks |
+| ADMIN_EMAIL | recommended | Only this account counts as admin |
+| ADMIN_IPS | optional | Comma-separated IPs excluded from stats |
+| ALLOW_SIGNUP | leave unset | `true` only to seed the first admin, then remove |
 
-No `BETTER_AUTH_SECRET`, no `BETTER_AUTH_URL` — there is no auth in V1.
+Removed in v0.2.1: `ADMIN_SECRET`, `NEXT_PUBLIC_ADMIN_SECRET`. Delete them from Vercel and Cloudflare. Never put secrets in `NEXT_PUBLIC_*`.
 
 ---
 
 ## Timeline / Phases
 
 ### Phase 0 — Repo & infrastructure
-Status: `[ ]` pending
+Status: `[x]` done
 
-- [ ] Create Next.js 16 project (`create-next-app`)
-- [ ] Configure Tailwind v4 with BRAIN.md palette tokens in `globals.css`
-- [ ] Set up Neon project, get connection strings
-- [ ] Set up Upstash Redis project, get REST credentials
-- [ ] Configure `wrangler.jsonc` and `open-next.config.ts` for Cloudflare
-- [ ] Verify libwebp WASM loads from jsDelivr CDN in browser (CSP test)
-- [ ] Confirm `wasm-unsafe-eval` CSP header works on both Vercel and Cloudflare
-- [ ] Create `.env.example` with all required vars
-- [ ] Connect repo to Vercel and Cloudflare
+- [x] Create Next.js 16 project (`create-next-app`)
+- [x] Configure Tailwind v4 with BRAIN.md palette tokens in `globals.css`
+- [x] Set up Neon project, get connection strings
+- [x] Set up Upstash Redis project, get REST credentials
+- [x] Configure `wrangler.jsonc` and `open-next.config.ts` for Cloudflare
+- [x] Verify libwebp WASM loads same-origin from /public/wasm under the CSP
+- [x] Confirm `wasm-unsafe-eval` CSP header works on both Vercel and Cloudflare
+- [x] Create `.env.example` with all required vars
+- [x] Connect repo to Vercel
+- [ ] Connect repo to Cloudflare and verify the Workers mirror (status not verified)
 
 ### Phase 1 — DB + API
-Status: `[ ]` pending
+Status: `[x]` done
 
-- [ ] Write Drizzle schema (`reviews` table)
-- [ ] Run `drizzle-kit push` on Neon
-- [ ] Build `lib/db/index.ts` (lazy-getDb, neon-http driver)
-- [ ] Build `lib/redis.ts` (Upstash rate limiter)
-- [ ] Build `app/api/reviews/route.ts` (GET + POST, rate limiting, input sanitization)
-- [ ] Test API routes locally
+- [x] Write Drizzle schema (`reviews` table)
+- [x] Run `drizzle-kit push` on Neon
+- [x] Build `lib/db/index.ts` (lazy-getDb, neon-http driver)
+- [x] Build `lib/redis.ts` (Upstash rate limiter)
+- [x] Build `app/api/reviews/route.ts` (GET + POST, rate limiting, input sanitization)
+- [x] Test API routes locally
 
 ### Phase 2 — Conversion engine
-Status: `[ ]` pending
+Status: `[x]` done
 
-- [ ] Build `lib/wasm/loader.ts` — singleton init for libwebp WASM from CDN
-- [ ] Build `lib/zip/processor.ts` — JSZip unpack, convert, repack with path preservation
-- [ ] Handle chunked batch processing (10 images at a time)
-- [ ] Handle Firefox ZIP-input fallback path
-- [ ] Test: single file, batch files, folder (Chrome), ZIP input (Firefox)
+- [x] Build `lib/wasm/loader.ts` — singleton init for libwebp WASM from CDN
+- [x] Build `lib/zip/processor.ts` — JSZip unpack, convert, repack with path preservation
+- [x] Handle chunked batch processing (10 images at a time)
+- [x] Handle Firefox ZIP-input fallback path
+- [x] Test: single file, batch files, folder (Chrome), ZIP input (Firefox)
 
 ### Phase 3 — UI
-Status: `[ ]` pending
+Status: `[x]` done
 
-- [ ] Root layout: fonts (Syne + Inter + JetBrains Mono), metadata, CSP headers
-- [ ] WASM loading state — spinner shown until engine is ready
-- [ ] `ConverterZone` — drag-and-drop + file picker + folder picker
-- [ ] Browser compatibility detection — show Firefox notice before user tries folder upload
-- [ ] Quality slider (0–100)
-- [ ] Progress bar — `converted X of N`
-- [ ] Download button — single file or ZIP
-- [ ] `ReviewForm` + `ReviewList`
-- [ ] Footer — about section, links, review anchor
+- [x] Root layout: fonts (Syne + Inter + JetBrains Mono), metadata, CSP headers
+- [x] WASM loading state — spinner shown until engine is ready
+- [x] `ConverterZone` — drag-and-drop + file picker + folder picker
+- [x] Browser compatibility detection — show Firefox notice before user tries folder upload
+- [x] Quality slider (0–100)
+- [x] Progress bar — `converted X of N`
+- [x] Download button — single file or ZIP
+- [x] `ReviewForm` + `ReviewList`
+- [x] Footer — about section, links, review anchor
 
 ### Phase 4 — Polish & deploy
-Status: `[ ]` pending
+Status: `[~]` in progress
 
 - [ ] Mobile responsiveness audit
 - [ ] OG image + metadata
 - [ ] Verify CSP headers in production (Vercel + Cloudflare)
-- [ ] Run Waterborne (emoji sweep)
-- [ ] Run Valley of Death (spec vs code)
-- [ ] Run Sentinel (security audit)
+- [x] Run Waterborne (emoji sweep)
+- [x] Run Valley of Death (spec vs code)
+- [x] Run Sentinel (security audit) — repo audit and fixes shipped in v0.2.1
 - [ ] Run Airborne + Humanizer (SEO + copy)
 - [ ] Run cave-man (visual audit)
-- [ ] Run motion-hive (animation pass)
+- [x] Run motion-hive (animation pass)
 - [ ] Call Council POST
 
 ---
@@ -218,9 +238,10 @@ Status: `[ ]` pending
 ## Next Steps
 
 In order:
-1. Scaffold Next.js 16 project locally
-2. Configure Tailwind v4 palette tokens from BRAIN.md
-3. Verify libwebp WASM loads from CDN with correct CSP headers — this is Phase 0 gate
+1. Delete `ADMIN_SECRET` and `NEXT_PUBLIC_ADMIN_SECRET` from Vercel and Cloudflare; set `ADMIN_EMAIL`; confirm `ALLOW_SIGNUP` is unset
+2. Add Vitest and a lint script
+3. Finish POST-BUILD: Airborne + Humanizer, cave-man, Council POST
+4. Decide on tightening CSP (nonces) if the WASM build allows removing `unsafe-eval`
 
 ---
 
@@ -228,10 +249,14 @@ In order:
 
 **2026-06-27.** Canvas API explicitly rejected as conversion engine. `canvas.toBlob('image/webp')` fails silently on Firefox — falls back to PNG. libwebp WASM chosen for consistent output across all browsers.
 
-**2026-06-27.** libwebp WASM loads from CDN, not bundled. Reason: Cloudflare Workers 1MB compressed bundle limit. CDN approach also means WASM updates independently of the Next.js deploy.
+**2026-06-27.** libwebp WASM originally planned to load from a CDN because of the Cloudflare Workers 1MB bundle limit. (Superseded: now served same-origin from `/public/wasm`, which is not part of the Worker bundle.)
 
 **2026-06-27.** Firefox folder upload fallback is ZIP input, not a degraded experience. User uploads a ZIP, JSZip unpacks client-side, output is the same ZIP structure. No server involved.
 
 **2026-06-27.** Reviews query caps at 50 rows (latest). Prevents Neon free tier DB from becoming a liability if the tool goes viral.
 
-**2026-06-27.** Upstash Redis rate limiter on POST /api/reviews only. This is the entire attack surface of the app — everything else is client-side.
+**2026-06-27.** Upstash Redis rate limiter on POST /api/reviews. (Superseded 2026-10-04: contact and stats POST are limited too.)
+
+**2026-07-25.** Better Auth added for the admin dashboard (admin-only; visitors still never need an account). Contacts and stats tables added. The original "no auth, reviews table only" scope in this file was superseded.
+
+**2026-10-04.** Security hardening (v0.2.1): admin APIs moved from a shared secret (which was exposed via `NEXT_PUBLIC_ADMIN_SECRET`) to server-validated sessions; sign-up disabled by default; contact and stats rate limited; client IP derived from platform-trusted headers; docs synced to the code.
