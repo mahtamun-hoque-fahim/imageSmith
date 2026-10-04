@@ -3,7 +3,7 @@
 ## [v0.2.1] — 2026-10-04
 
 ### Security
-- Admin messages API (`/api/admin/contacts`) now requires a validated Better Auth session. The shared `ADMIN_SECRET` scheme, which exposed its value to the browser through `NEXT_PUBLIC_ADMIN_SECRET`, and the `'changeme'` fallback are removed. Rotate or delete the old `ADMIN_SECRET` / `NEXT_PUBLIC_ADMIN_SECRET` env vars.
+- Admin messages API (`/api/admin/contacts`) now requires a validated Better Auth session. The shared-secret scheme is removed. In production `ADMIN_SECRET` was unset, so the server accepted the publicly visible default `'changeme'` (and any `NEXT_PUBLIC_ADMIN_SECRET` would have been shipped to the browser). Delete `ADMIN_SECRET` / `NEXT_PUBLIC_ADMIN_SECRET` anywhere they are set.
 - Public sign-up is disabled by default (`disableSignUp`); set `ALLOW_SIGNUP=true` only to seed an admin.
 - `/api/stats` GET uses the same server-side admin check; optional `ADMIN_EMAIL` allowlist added.
 - Rate limits added: `POST /api/contact` 5 per IP per hour, `POST /api/stats` 60 per IP per minute.

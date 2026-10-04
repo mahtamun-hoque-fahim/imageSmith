@@ -62,9 +62,9 @@ git config user.email "mahtamunhoquefahim@gmail.com"
 (Newest first. Maximum 10 entries — drop the oldest when an 11th is added.)
 
 ### 2026-10-04 (security hardening, v0.2.1)
-- Did: Audited the repo. Replaced the shared-secret admin API (`NEXT_PUBLIC_ADMIN_SECRET` was public) with server-validated Better Auth sessions; closed public sign-up; added rate limits to contact and stats; added trusted client-IP helper (fixes reviews limiter bypass on the Cloudflare mirror); added input type checks; added `.env.example`.
+- Did: Audited the repo. Replaced the shared-secret admin API (live behaviour: `ADMIN_SECRET` unset on Vercel, so the public default `'changeme'` was accepted) with server-validated Better Auth sessions; closed public sign-up; added rate limits to contact and stats; added trusted client-IP helper (fixes reviews limiter bypass on the Cloudflare mirror); added input type checks; added `.env.example`.
 - Docs: synced BRAIN, PLANNER, SITETREE, README, CHANGELOG, sitemap to the real v0.2.x state.
-- Follow-up for Fahim: delete `ADMIN_SECRET` and `NEXT_PUBLIC_ADMIN_SECRET` from Vercel and Cloudflare; set `ADMIN_EMAIL`; confirm `ALLOW_SIGNUP` is unset; treat stored contact messages as possibly read by others before the fix.
+- Follow-up for Fahim: set `ADMIN_EMAIL` in Vercel and Cloudflare; delete `ADMIN_SECRET` / `NEXT_PUBLIC_ADMIN_SECRET` wherever set (not present on Vercel; check Cloudflare); confirm `ALLOW_SIGNUP` is unset; treat stored contact messages as possibly read by others before the fix.
 - Next: add Vitest, add a lint script, then POST-BUILD audits.
 
 ### 2026-07-25 (dashboard + auth complete)

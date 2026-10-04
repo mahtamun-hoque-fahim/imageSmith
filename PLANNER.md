@@ -167,7 +167,7 @@ Rate limiting uses Upstash Redis keyed by `getClientIp` (`src/lib/ip.ts`). Limit
 | ADMIN_IPS | optional | Comma-separated IPs excluded from stats |
 | ALLOW_SIGNUP | leave unset | `true` only to seed the first admin, then remove |
 
-Removed in v0.2.1: `ADMIN_SECRET`, `NEXT_PUBLIC_ADMIN_SECRET`. Delete them from Vercel and Cloudflare. Never put secrets in `NEXT_PUBLIC_*`.
+Removed in v0.2.1: `ADMIN_SECRET`, `NEXT_PUBLIC_ADMIN_SECRET`. Delete them wherever they are set. Never put secrets in `NEXT_PUBLIC_*`.
 
 ---
 
@@ -238,7 +238,7 @@ Status: `[~]` in progress
 ## Next Steps
 
 In order:
-1. Delete `ADMIN_SECRET` and `NEXT_PUBLIC_ADMIN_SECRET` from Vercel and Cloudflare; set `ADMIN_EMAIL`; confirm `ALLOW_SIGNUP` is unset
+1. Set `ADMIN_EMAIL`; delete `ADMIN_SECRET` / `NEXT_PUBLIC_ADMIN_SECRET` wherever set; confirm `ALLOW_SIGNUP` is unset
 2. Add Vitest and a lint script
 3. Finish POST-BUILD: Airborne + Humanizer, cave-man, Council POST
 4. Decide on tightening CSP (nonces) if the WASM build allows removing `unsafe-eval`
@@ -259,4 +259,4 @@ In order:
 
 **2026-07-25.** Better Auth added for the admin dashboard (admin-only; visitors still never need an account). Contacts and stats tables added. The original "no auth, reviews table only" scope in this file was superseded.
 
-**2026-10-04.** Security hardening (v0.2.1): admin APIs moved from a shared secret (which was exposed via `NEXT_PUBLIC_ADMIN_SECRET`) to server-validated sessions; sign-up disabled by default; contact and stats rate limited; client IP derived from platform-trusted headers; docs synced to the code.
+**2026-10-04.** Security hardening (v0.2.1): admin APIs moved from a shared secret (unset in production, so the public default `'changeme'` was accepted) to server-validated sessions; sign-up disabled by default; contact and stats rate limited; client IP derived from platform-trusted headers; docs synced to the code.

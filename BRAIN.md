@@ -91,7 +91,7 @@ What's broken or incomplete:
 - airborne, humanizer, cave-man, council POST not recorded as done
 
 What's next:
-- Remove old ADMIN_SECRET / NEXT_PUBLIC_ADMIN_SECRET env vars, set ADMIN_EMAIL
+- Set ADMIN_EMAIL; delete ADMIN_SECRET / NEXT_PUBLIC_ADMIN_SECRET wherever set
 - Add Vitest, add lint script
 - Finish POST-BUILD pipeline
 ```
